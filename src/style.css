@@ -1,0 +1,10 @@
+@import "graphiql/graphiql.css";
+
+body {
+    padding: 0;
+    margin: 50px 100px;
+}
+
+#root {
+    height: 100vh
+}

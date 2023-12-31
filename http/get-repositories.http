@@ -1,0 +1,4 @@
+### Get my repositories
+GET {{origin}}/users/dgroomes/repos
+Accept: application/vnd.github.v3+json
+Authorization: Bearer {{personal_access_token}}

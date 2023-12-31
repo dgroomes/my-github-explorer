@@ -1,0 +1,34 @@
+import {app, BrowserWindow} from "electron";
+import path from "path";
+import fs from "fs";
+
+// This allows TypeScript to be aware of the magic constants that are created by webpack DefinePlugin
+// that tells the Electron app where to look for the Webpack-bundled app code (depending on whether you're running in
+// development or production).
+declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
+declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
+
+if (!process.stdout.isTTY) {
+    const logsFile = path.join(app.getPath("logs"), "main.log");
+    console.log("Redirecting standard output and standard error to", logsFile);
+    const writeStream = fs.createWriteStream(logsFile);
+    process.stdout.write = process.stderr.write = writeStream.write.bind(writeStream);
+}
+
+console.log("Hello from main.ts!");
+
+app.on("ready", async function onReady() {
+    const mainWindow = new BrowserWindow({
+        height: 600,
+        width: 800,
+        webPreferences: {
+            preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+        },
+    });
+
+    await mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+
+    mainWindow.webContents.openDevTools();
+});
+
+

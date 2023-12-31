@@ -1,0 +1,25 @@
+{
+  "name": "my-github-explorer_build-support",
+  "version": "1.0.0",
+  "private": true,
+  "exports": {
+    "./plugin": "./dist/BuildSupportForgePlugin.js",
+    "./config": "./dist/build-support-forge-config.js"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "~5.2"
+  },
+  "dependencies": {
+    "@electron-forge/cli": "~6.4.2",
+    "@electron-forge/maker-dmg": "~6.4.2",
+    "css-loader": "~6.8.1",
+    "electron": "~27.0.4",
+    "html-webpack-plugin": "~5.5.3",
+    "style-loader": "~3.3.3",
+    "ts-loader": "~9.5.0",
+    "webpack-dev-server": "~4.15.1"
+  }
+}

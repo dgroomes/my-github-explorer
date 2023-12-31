@@ -1,8 +1,7 @@
 .idea/
-build/
 node_modules/
-bundle.js
-bundle.js.map
-bundle.css
-bundle.css.map
+dist/
+.webpack/
+out/
 http-client.private.env.json
+my-github-explorer_build-support-*.tgz

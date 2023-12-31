@@ -2,7 +2,7 @@
 
 NOT YET FULLY IMPLEMENTED
 
-⏯ A toy GitHub data explorer which I'm using to explore frontend tech like GraphiQL, React hooks, and Redux.
+⏯️A toy GitHub data explorer which I'm using to explore frontend tech like GraphiQL, React, Redux and Electron.
 
 
 ## Overview
@@ -18,19 +18,50 @@ repo into its own repository.
 
 ## Instructions
 
-Follow these instructions to build and serve the program:
+Follow these instructions to build and serve the application:
 
-1. Install the dependencies
+1. Pre-requisite: Node.js
+    * I used Node v20
+2. Pre-requisite: `build-support`
+    * **Important**: The `build-support` library must be built before you can develop the main application. Follow the
+      instructions in the [`build-support` README](build-support/README.md). You only need to do this the first time and
+      then any time you change `build-support`. Re-install it with the following command.
+    * ```shell
+      npm install --save-dev ./build-support/my-github-explorer_build-support-1.0.0.tgz
+      ```
+3. Install dependencies
     * ```shell
       npm install
       ```
-2. Serve the content (and build continuously)
+4. Continuously build and run the app
     * ```shell
       npm start
       ```
-3. Open the browser
-    * Open <http://[::1]:8080>
-    * Click around the UI and iterate!
+5. Make the app distribution
+    * ```shell
+      npm run make
+      ```
+    * You will then need to find the `.dmg` file in the `out` directory and install it.
+
+
+## Instructions for React DevTools
+
+When you develop a React application, you'll likely want the power of the excellent [React Developer Tools](https://react.dev/learn/react-developer-tools).
+
+Follows these instructions to install and run React Developer Tools in standalone mode and connect it to from our app:
+
+1. Install React Developer Tools globally:
+    * ```shell
+      npm install -g react-devtools
+      ```
+2. Run React Developer Tools in standalone mode:
+    * ```shell
+      react-devtools
+      ```
+3. Run our app but with a special flag to connect to the standalone React Developer Tools:
+    * ```shell
+      npm run start:react-devtools
+      ```
 
 
 ## Wish List
@@ -55,10 +86,24 @@ General clean-ups, todos and things I wish to implement for this project:
 * [ ] Show the pre-constructed queries in codemirror (using a GraphiQL component). We want the syntax highlighting. Can
   we make them read-only?
 * [x] DONE Extract into its own repository
-* [ ] Turn this into an Electron app (primarily because I want native secrets)
+* [x] DONE Turn this into an Electron app (primarily because I want native secrets)
+  * This was extremely larger than I anticipated. Went down a rabbit hole here: <https://github.com/dgroomes/electron-playground/tree/main/realistic>
+    I'll port over the same thing.
+  * DONE Port over `build-support`
+  * DONE Port over `package-json.mjs` style.
+  * DONE Add `main.js` file for Electron main process.
+  * DONE .gitignore
+  * DONE Get it to build and add instructions to README.
+  * DONE tsconfig changes
+  * DONE Get the styles to work. I need to figure out how to import the CSS from GraphiQL again.
+  * Make sure React DevTools works
 * [ ] Use Redux. I think I want to use Redux Sagas specifically. I don't grok Redux. I need to learn it an app that
   "does real things" like make HTTP requests and handles a rich UI. Hopefully I'll get it. I'm expecting the Redux
   devtools will be particularly useful, but jury is out.
+* [ ] Upgrade dependencies.
+* [ ] Consider enforcing `noImplicitAny`
+* [ ] Why are there HTTP request failures to download fonts? E.g. `data:font/woff2;base64,` etc. This happens when
+  serving but not in the production app.
 
 
 ## Reference

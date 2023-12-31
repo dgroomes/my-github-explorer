@@ -4,19 +4,25 @@ See the official reference documentation for tsconfig: https://www.typescriptlan
 
 {
   "compilerOptions": {
-    // Most projects (and virtually every single new project) should enable the 'esModuleInterop' flag. It allows import
-    // statements like the following, to work:
-    //
-    // ```typescript
-    // import React from 'react'
-    // ```
-    //
-    // See https://www.typescriptlang.org/tsconfig#esModuleInterop
+    "target": "ES6",
+    "allowJs": true,
+    "module": "commonjs",
+    "skipLibCheck": true,
     "esModuleInterop": true,
-    // The TypeScript toolchain needs to know we are targeting React in the browser.
+    "sourceMap": true,
+    "baseUrl": ".",
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
     "jsx": "react",
     "strictNullChecks": true,
-    // We are targeting the browser.
-    "lib": ["DOM", "DOM.Iterable", "ESNext"]
-  }
+    "paths": {
+      "*": [
+        "node_modules/*"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*"
+  ]
 }

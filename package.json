@@ -1,19 +1,27 @@
 {
   "name": "my-github-explorer",
-  "private": true,
-  "dependencies": {
-    "antd": "5.3.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "graphiql": "2.4.0",
-    "graphql": "16.6.0"
-  },
+  "version": "1.0.0",
+  "description": "A toy GitHub data explorer which I'm using to explore frontend tech like GraphiQL, React, Redux and Electron.",
+  "main": ".webpack/main",
   "scripts": {
-    "start": "node serve.mjs"
+    "start": "DEBUG=true electron-forge start",
+    "start:react-devtools": "MY_GITHUB_EXPLORER_CONNECT_TO_REACT_DEVTOOLS=true electron-forge start",
+    "package": "DEBUG=true electron-forge package",
+    "make": "electron-forge make"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "antd": "~5.3.0",
+    "graphiql": "2.4.0",
+    "graphql": "16.6.0",
+    "graphql-ws": "^5",
+    "react": "~18.2.0",
+    "react-dom": "~18.2.0"
   },
   "devDependencies": {
-    "@types/react": "18.0.28",
-    "@types/react-dom": "18.0.11",
-    "esbuild": "0.17.11"
+    "@types/react": "~18.2.37",
+    "@types/react-dom": "~18.2.15",
+    "electron": "~27.0.4",
+    "my-github-explorer_build-support": "file:build-support/my-github-explorer_build-support-1.0.0.tgz"
   }
 }

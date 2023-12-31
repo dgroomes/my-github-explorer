@@ -5,21 +5,21 @@ This script generates the `package.json` files for this project. Run it with `no
 import fs from "fs";
 
 const versions = {
-    antd: "~5.3.0", // Ant Design releases: https://github.com/ant-design/ant-design/releases
+    antd: "~5.12.6", // Ant Design releases: https://github.com/ant-design/ant-design/releases
     cssLoader: "~6.8.1", // css-loader releases: https://github.com/webpack-contrib/css-loader/releases
-    electron: "~27.0.4", // Electron releases: https://releases.electronjs.org/releases/stable
+    electron: "~28.1.0", // Electron releases: https://releases.electronjs.org/releases/stable
     electronForge: "~6.4.2", // Electron Forge releases: https://github.com/electron/forge/releases
-    graphiql: "2.4.0", // GraphiQL releases: https://github.com/graphql/graphiql/releases
-    graphql: "16.6.0", // GraphQL releases: https://github.com/graphql/graphql-js/releases
-    graphqlWs: "^5", // graphql-ws releases: https://github.com/enisdenjo/graphql-ws/releases
-    htmlWebpackPlugin: "~5.5.3", // html-webpack-plugin releases: https://github.com/jantimon/html-webpack-plugin/blob/main/CHANGELOG.md
+    graphiql: "~3.0.10", // GraphiQL releases: https://github.com/graphql/graphiql/releases
+    graphql: "~16.8.1", // GraphQL releases: https://github.com/graphql/graphql-js/releases
+    graphqlWs: "~5.14.3", // graphql-ws releases: https://github.com/enisdenjo/graphql-ws/releases
+    htmlWebpackPlugin: "~5.6.0", // html-webpack-plugin releases: https://github.com/jantimon/html-webpack-plugin/blob/main/CHANGELOG.md
     react: "~18.2.0", // React releases: https://legacy.reactjs.org/versions
-    reactDomTypes: "~18.2.15", // @types/react-dom releases: https://www.npmjs.com/package/@types/react-dom
-    reactTypes: "~18.2.37", // @types/react releases: https://www.npmjs.com/package/@types/react
+    reactDomTypes: "~18.2.18", // @types/react-dom releases: https://www.npmjs.com/package/@types/react-dom?activeTab=versions
+    reactTypes: "~18.2.46", // @types/react releases: https://www.npmjs.com/package/@types/react?activeTab=versions
     styleLoader: "~3.3.3", // style-loader releases: https://github.com/webpack-contrib/style-loader/releases
-    tsLoader: "~9.5.0", // ts-loader releases: https://github.com/TypeStrong/ts-loader/releases
-    typescript: "~5.2", // TypeScript releases: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-2.html
-    webpackDevServer: "~4.15.1", // webpack-dev-server releases: https://github.com/webpack/webpack-dev-server/releases/tag/v4.15.1
+    tsLoader: "~9.5.1", // ts-loader releases: https://github.com/TypeStrong/ts-loader/releases
+    typescript: "~5.3", // TypeScript releases: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-2.html
+    webpackDevServer: "~4.15.1", // webpack-dev-server releases: https://github.com/webpack/webpack-dev-server/releases
 };
 
 /**

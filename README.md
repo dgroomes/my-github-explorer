@@ -100,9 +100,9 @@ General clean-ups, todos and things I wish to implement for this project:
 * [ ] Use Redux. I think I want to use Redux Sagas specifically. I don't grok Redux. I need to learn it an app that
   "does real things" like make HTTP requests and handles a rich UI. Hopefully I'll get it. I'm expecting the Redux
   devtools will be particularly useful, but jury is out.
-* [ ] Upgrade dependencies.
+* [x] DONE Upgrade dependencies.
 * [ ] Consider enforcing `noImplicitAny`
-* [ ] Why are there HTTP request failures to download fonts? E.g. `data:font/woff2;base64,` etc. This happens when
+* [x] DONE (GraphiQL defines fonts in data URLs) Why are there HTTP request failures to download fonts? E.g. `data:font/woff2;base64,` etc. This happens when
   serving but not in the production app.
 
 

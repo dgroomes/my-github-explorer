@@ -19,4 +19,3 @@ Follow these instructions to build the `build-support` library distribution.
     * ```shell
       npm pack
       ```
-

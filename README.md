@@ -68,6 +68,22 @@ Follows these instructions to install and run React Developer Tools in standalon
 
 General clean-ups, todos and things I wish to implement for this project:
 
+* [ ] Abstract the token input/storage into a component
+* [ ] Query (search) for the current user's repositories. Hardcode to a 100 limit (which is a limit of the API; then
+  you'll need pagination)
+* [ ] Query (get) the metadata for each of the repositories
+* [ ] Display the information in a table using [React Table](https://react-table-v7.tanstack.com/) 
+* [ ] Consider paginating through the results. This would be a cool application because we would see the table size grow.
+* [ ] Show the pre-constructed queries in codemirror (using a GraphiQL component). We want the syntax highlighting. Can
+  we make them read-only?
+* [ ] Use Redux. I think I want to use Redux Sagas specifically. I don't grok Redux. I need to learn it an app that
+  "does real things" like make HTTP requests and handles a rich UI. Hopefully I'll get it. I'm expecting the Redux
+  devtools will be particularly useful, but jury is out.
+* [ ] Consider enforcing `noImplicitAny`
+
+
+## Finished Wish List Items
+
 * [x] DONE Scaffold the project
 * [x] DONE Prompt for an access token. Validate the access token with a request to the GitHub API. Give
   informational UI feedback.
@@ -76,15 +92,7 @@ General clean-ups, todos and things I wish to implement for this project:
   `useState` and nullability I have now.
 * [x] DONE (I accomplished an abstraction but it is not great) Abstract the "useEffect unmount clean up fetch abort" stuff into generic code. I'm assuming there must be some
   concise API to derive for this common use case.
-* [ ] Abstract the token input/storage into a component
 * [x] DONE Abstract the token validation into a hook
-* [ ] Query (search) for the current user's repositories. Hardcode to a 100 limit (which is a limit of the API; then
-  you'll need pagination)
-* [ ] Query (get) the metadata for each of the repositories
-* [ ] Display the information in a table using [React Table](https://react-table-v7.tanstack.com/) 
-* [ ] Consider paginating through the results. This would be a cool application because we would see the table size grow.
-* [ ] Show the pre-constructed queries in codemirror (using a GraphiQL component). We want the syntax highlighting. Can
-  we make them read-only?
 * [x] DONE Extract into its own repository
 * [x] DONE Turn this into an Electron app (primarily because I want native secrets)
   * This was extremely larger than I anticipated. Went down a rabbit hole here: <https://github.com/dgroomes/electron-playground/tree/main/realistic>
@@ -97,11 +105,7 @@ General clean-ups, todos and things I wish to implement for this project:
   * DONE tsconfig changes
   * DONE Get the styles to work. I need to figure out how to import the CSS from GraphiQL again.
   * Make sure React DevTools works
-* [ ] Use Redux. I think I want to use Redux Sagas specifically. I don't grok Redux. I need to learn it an app that
-  "does real things" like make HTTP requests and handles a rich UI. Hopefully I'll get it. I'm expecting the Redux
-  devtools will be particularly useful, but jury is out.
 * [x] DONE Upgrade dependencies.
-* [ ] Consider enforcing `noImplicitAny`
 * [x] DONE (GraphiQL defines fonts in data URLs) Why are there HTTP request failures to download fonts? E.g. `data:font/woff2;base64,` etc. This happens when
   serving but not in the production app.
 

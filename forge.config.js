@@ -1,1 +1,1 @@
-module.exports = require("my-github-explorer_build-support/config");
+module.exports = require("my-github-explorer_build-support/config").forgeConfig;

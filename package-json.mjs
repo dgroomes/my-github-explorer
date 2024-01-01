@@ -8,7 +8,7 @@ const versions = {
     antd: "~5.12.6", // Ant Design releases: https://github.com/ant-design/ant-design/releases
     cssLoader: "~6.8.1", // css-loader releases: https://github.com/webpack-contrib/css-loader/releases
     electron: "~28.1.0", // Electron releases: https://releases.electronjs.org/releases/stable
-    electronForge: "~6.4.2", // Electron Forge releases: https://github.com/electron/forge/releases
+    electronForge: "~7.2.0", // Electron Forge releases: https://github.com/electron/forge/releases
     graphiql: "~3.0.10", // GraphiQL releases: https://github.com/graphql/graphiql/releases
     graphql: "~16.8.1", // GraphQL releases: https://github.com/graphql/graphql-js/releases
     graphqlWs: "~5.14.3", // graphql-ws releases: https://github.com/enisdenjo/graphql-ws/releases

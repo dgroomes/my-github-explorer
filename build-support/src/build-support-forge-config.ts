@@ -2,7 +2,8 @@ import type {ForgeConfig} from "@electron-forge/shared-types";
 import {MakerDMG} from "@electron-forge/maker-dmg";
 import {BuildSupportForgePlugin} from "./BuildSupportForgePlugin";
 
-const config: ForgeConfig = {
+// noinspection JSUnusedGlobalSymbols
+export const forgeConfig: ForgeConfig = {
     packagerConfig: {
         asar: true,
         // See https://github.com/dgroomes/electron-playground/blob/d40514c2f90ac847573c02e5c90e790a4f65cb86/realistic/build-support/src/build-support-forge-config.ts#L18
@@ -24,6 +25,3 @@ const config: ForgeConfig = {
         new BuildSupportForgePlugin(),
     ],
 };
-
-// noinspection JSUnusedGlobalSymbols
-export default config;

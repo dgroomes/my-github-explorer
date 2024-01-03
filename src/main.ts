@@ -1,6 +1,8 @@
 import {app, BrowserWindow} from "electron";
 import path from "path";
 import fs from "fs";
+import {getPersonalAccessToken, savePersonalAccessToken} from "./github-personal-access-token";
+import { ipcMain } from "electron";
 
 // This allows TypeScript to be aware of the magic constants that are created by webpack DefinePlugin
 // that tells the Electron app where to look for the Webpack-bundled app code (depending on whether you're running in
@@ -31,4 +33,5 @@ app.on("ready", async function onReady() {
     mainWindow.webContents.openDevTools();
 });
 
-
+ipcMain.handle("get-personal-access-token",  (_event) => getPersonalAccessToken());
+ipcMain.handle("save-personal-access-token", (_event, token: string) => savePersonalAccessToken(token));

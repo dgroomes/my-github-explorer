@@ -6,16 +6,16 @@ Miscellaneous code that I don't know/care where to put.
 // unions and interfaces. It's run-of-the-mill to use a union of string (like in EnteredToken) but it's cool that I can
 // union over a combination of strings and interfaces (and other types).
 //
-// It didn't come naturally but I think I'm building an intuition for it.
-export type TokenState = 'empty' | EnteredToken | ValidatedToken
+// It didn't come naturally, but I think I'm building an intuition for it.
+export type TokenState = 'restoring' | 'empty' | EnteredToken | ValidatedToken
 
 export interface EnteredToken {
-    kind: 'partial' | 'entered' | 'validating' | 'invalid'
+    kind: 'partial' | 'entered' | 'restored' | 'invalid'
     token: string
 }
 
 export interface ValidatedToken {
-    kind: 'valid'
+    kind: 'valid' | 'storing'
     token: string
     login: string
 }

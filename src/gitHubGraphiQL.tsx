@@ -19,7 +19,7 @@ export default function GitHubGraphiQL() {
     if (typeof token === "object") {
         log({kind: token.kind});
     } else if (token === "empty") {
-        log("Token is empty");
+        log("Token is empty.");
     }
 
     // Well, I refactored this to be more "algebraic data types"-like but the nesting is a bit much and so is the
@@ -38,8 +38,17 @@ export default function GitHubGraphiQL() {
             />
             <Button disabled={true}> Submit</Button>
         </Space>)
+    } else if (token === 'restoring') {
+        return (<Space direction="horizontal">
+            <Input.Password
+                readOnly={true}
+                disabled={true}
+                visibilityToggle={false}
+                placeholder="Restoring token..."
+            />
+            <Spin/>
+        </Space>)
     } else {
-
         if (token.kind === "invalid") {
             return (<Alert
                 message="Error"
@@ -47,7 +56,7 @@ export default function GitHubGraphiQL() {
                 type="error"
                 showIcon
             />)
-        } else if (token.kind === 'entered' || token.kind === 'validating') {
+        } else if (token.kind === 'restored' || token.kind === 'entered' || token.kind === 'storing') {
             return (<Space direction="horizontal">
                 <Input.Password
                     readOnly={true}

@@ -42,6 +42,15 @@ Follow these instructions to build and serve the application:
     * You will then need to find the `.dmg` file in the `out` directory and install it.
 
 
+Tip: the GitHub personal access token is saved for convenience in an unencrypted file in a conventional directory in the
+Electron app's installation directory. But you might want to blow this away to force the app through another flow. Use
+this alias:
+
+```shell
+alias my-github-explorer-reset-token='rm "$HOME/Library/Application Support/my-github-explorer/pat"'
+```
+
+
 ## Instructions for React DevTools
 
 When you develop a React application, you'll likely want the power of the excellent [React Developer Tools](https://react.dev/learn/react-developer-tools).
@@ -66,8 +75,15 @@ Follows these instructions to install and run React Developer Tools in standalon
 
 General clean-ups, todos and things I wish to implement for this project:
 
-* [ ] Get token from storage using Electron's `safeStorage` API (well safe is always relative). This involves code across
-  the main and renderer processes.
+* [x] DONE Get token from storage using Electron's `safeStorage` API (well safe is always relative). This involves code across
+  the main and renderer processes. Note: I've been writing hard-to-reason-about state-checking code to infer what work
+  my code needs to take next. This is awkward because we're reconstituting the transition from the state but what would
+* be more natural is if we could just do the work (or queue it up?) at the time we made the state change (i.e. transition)
+  in the first place. For example, I set state to "storing" but then at a later invocation of the render function I use
+  a combination of checking for "storing" and also `useEffects` dependencies to actually kick off the storing work. But
+  it's like... at this point we're actually doing the storing work. Should I model it as "need-to-store" and "storing"
+  and just jam descriptive states in the state? I don't really get it, but the nature of an async domain is tricky
+  regardless. 
 * [ ] Abstract the token input/storage into a component
 * [ ] Query (search) for the current user's repositories. Hardcode to a 100 limit (which is a limit of the API; then
   you'll need pagination)

@@ -2,18 +2,16 @@
 
 NOT YET FULLY IMPLEMENTED
 
-⏯️A toy GitHub data explorer which I'm using to explore frontend tech like GraphiQL, React, Redux and Electron.
+⏯️A toy GitHub data explorer which I'm using to explore frontend tech like GraphiQL, Redux, React, TypeScript and Electron.
 
 
 ## Overview
 
-This an application of the GraphiQL library that uses some of its components to create a simple "repository metadata
-lister" user interface. It is an SPA that uses the GitHub GraphQL API to list the metadata of a user's repositories.
-The purpose of this project is to be an intermediate showcase of GraphiQL, focussed on its React components.
-
-UPDATE 2023-11-05: This project has ballooned a little bit because I implemented a custom `useFetch` hook (which I really
-like) and now I want to use this project as a means to explore Redux in a "real app". I promoted this from my [graphiql-playground](https://github.com/dgroomes/graphiql-playground)
-repo into its own repository.
+This is a mash-up of front-end tech I'm interested in learning more deeply by way of a realistic application. I often
+learn libraries, languages and frameworks by way of minimal runnable examples, but these small examples don't let
+complex integration scenarios emerge. This project is an SPA that uses the GitHub GraphQL API and [GraphiQL](https://github.com/graphql/graphiql)
+components to fetch metadata about repositories and present it using React. It also uses Redux and Electron. The amount
+of side-effecting, stateful code and UI complexity is enough to really showcase how this tech works.
 
 
 ## Instructions

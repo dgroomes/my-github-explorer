@@ -47,7 +47,6 @@ function generatePackageJson(directory, dryRun, packageJsonContent) {
 generatePackageJson(".", false, {
     name: "my-github-explorer",
     version: "1.0.0",
-    description: "A toy GitHub data explorer which I'm using to explore frontend tech like GraphiQL, React, Redux and Electron.",
     main: ".webpack/main",
     scripts: {
         start: "DEBUG=true electron-forge start",

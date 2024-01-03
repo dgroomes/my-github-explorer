@@ -3,6 +3,9 @@ import GraphiQL from 'graphiql'
 import {createGraphiQLFetcher} from '@graphiql/toolkit'
 import {Alert, Button, Input, Space, Spin} from "antd"
 import {useToken} from "./useToken";
+import {logger} from "./code";
+
+const log = logger("GitHubGraphiQL");
 
 /**
  * This is one of the main components. I need to extract some of this into smaller components/hooks. I want to use the
@@ -11,7 +14,13 @@ import {useToken} from "./useToken";
  * This component has some logic to request/validate a GitHub personal access token.
  */
 export default function GitHubGraphiQL() {
+    log("Invoked.");
     const [token, setToken] = useToken()
+    if (typeof token === "object") {
+        log({kind: token.kind});
+    } else if (token === "empty") {
+        log("Token is empty");
+    }
 
     // Well, I refactored this to be more "algebraic data types"-like but the nesting is a bit much and so is the
     // duplicated input/button stuff.
@@ -38,7 +47,7 @@ export default function GitHubGraphiQL() {
                 type="error"
                 showIcon
             />)
-        } else if (token.kind === 'validating') {
+        } else if (token.kind === 'entered' || token.kind === 'validating') {
             return (<Space direction="horizontal">
                 <Input.Password
                     readOnly={true}

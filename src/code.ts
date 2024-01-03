@@ -7,15 +7,37 @@ Miscellaneous code that I don't know/care where to put.
 // union over a combination of strings and interfaces (and other types).
 //
 // It didn't come naturally but I think I'm building an intuition for it.
-type TokenState = 'empty' | EnteredToken | ValidatedToken
+export type TokenState = 'empty' | EnteredToken | ValidatedToken
 
-interface EnteredToken {
+export interface EnteredToken {
     kind: 'partial' | 'entered' | 'validating' | 'invalid'
     token: string
 }
 
-interface ValidatedToken {
+export interface ValidatedToken {
     kind: 'valid'
     token: string
     login: string
+}
+
+
+/**
+ * Create a logger function that prepends the current time and the name of the logger.
+ *
+ * For example if you write:
+ *
+ *     const log = logger("myLogger");
+ *     log("Hello world");
+ *
+ * Then you'll see something like this in the console:
+ *
+ *     2024-01-01T00:00:00.000Z [myLogger] - Hello world
+ *
+ * @param name
+ */
+export function logger(name: string) {
+    return function (...args: any[]) {
+        const time = new Date().toISOString();
+        console.log(`${time} [${name}] - `, ...args);
+    }
 }

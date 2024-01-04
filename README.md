@@ -84,7 +84,7 @@ General clean-ups, todos and things I wish to implement for this project:
   it's like... at this point we're actually doing the storing work. Should I model it as "need-to-store" and "storing"
   and just jam descriptive states in the state? I don't really get it, but the nature of an async domain is tricky
   regardless. 
-* [ ] Abstract the token input/storage into a component
+* [ ] (Update: maybe, maybe not) Abstract the token input/storage into a component
 * [ ] Query (search) for the current user's repositories. Hardcode to a 100 limit (which is a limit of the API; then
   you'll need pagination)
 * [ ] Query (get) the metadata for each of the repositories
@@ -96,7 +96,7 @@ General clean-ups, todos and things I wish to implement for this project:
   "does real things" like make HTTP requests and handles a rich UI. Hopefully I'll get it. I'm expecting the Redux
   devtools will be particularly useful, but jury is out.
 * [ ] Consider enforcing `noImplicitAny`
-* [ ] Consider adding Prettier or something. I'm mostly annoyed with arbitrarily using double and single quotes and using
+* [x] DONE Consider adding Prettier or something. I'm mostly annoyed with arbitrarily using double and single quotes and using
   and not using semicolons.
 * [x] DONE (fixed, but `useFetch` now doesn't make sense. How do people do this? Just ignore unmounts for the clean up function?)
       Defect: validation fetch request is getting cancelled prematurely. My `useFetch` must be buggy.

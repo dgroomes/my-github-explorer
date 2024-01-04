@@ -6,7 +6,8 @@
     "start": "DEBUG=true electron-forge start",
     "start:react-devtools": "MY_GITHUB_EXPLORER_CONNECT_TO_REACT_DEVTOOLS=true electron-forge start",
     "package": "DEBUG=true electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "format": "prettier --write 'src/**/*.{ts,tsx}' 'build-support/src/**/*.ts'"
   },
   "license": "UNLICENSED",
   "dependencies": {
@@ -21,6 +22,7 @@
     "@types/react": "~18.2.46",
     "@types/react-dom": "~18.2.18",
     "electron": "~28.1.0",
-    "my-github-explorer_build-support": "file:build-support/my-github-explorer_build-support-1.0.0.tgz"
+    "my-github-explorer_build-support": "file:build-support/my-github-explorer_build-support-1.0.0.tgz",
+    "prettier": "~3.1.1"
   }
 }

@@ -1,4 +1,4 @@
-import {Compiler, MultiCompiler, MultiStats, Stats, Watching} from 'webpack';
+import { Compiler, MultiCompiler, MultiStats, Stats, Watching } from "webpack";
 
 /*
 webpack utility functions
@@ -32,17 +32,17 @@ export function webpackRunPromisified(compiler: Compiler): Promise<Stats>;
 export function webpackRunPromisified(compiler: MultiCompiler): Promise<MultiStats>;
 
 export function webpackRunPromisified(compiler: Compiler | MultiCompiler): Promise<Stats | MultiStats> {
-    return new Promise((resolve, reject) => {
-        compiler.run((err: Error | null, stats: Stats | MultiStats) => {
-            // Remember, the webpack compiler will only error if something "very wrong" happens. If the compilation
-            // fails due to, say, a TypeScript type error, this is considered a normal compilation result because webpack
-            // itself didn't error, there was a problem with the user's source code. In that case, the "stats" object
-            // describes the compilation errors.
-            if (err) return reject(err);
+  return new Promise((resolve, reject) => {
+    compiler.run((err: Error | null, stats: Stats | MultiStats) => {
+      // Remember, the webpack compiler will only error if something "very wrong" happens. If the compilation
+      // fails due to, say, a TypeScript type error, this is considered a normal compilation result because webpack
+      // itself didn't error, there was a problem with the user's source code. In that case, the "stats" object
+      // describes the compilation errors.
+      if (err) return reject(err);
 
-            return resolve(stats);
-        });
+      return resolve(stats);
     });
+  });
 }
 
 /**
@@ -76,51 +76,51 @@ export function webpackRunPromisified(compiler: Compiler | MultiCompiler): Promi
  * @param compiler
  */
 export function webpackWatchPromisified(compiler: Compiler): PromisifiedWatcher {
-    let rejectCurrent: (reason?: any) => void;
-    let resolveCurrent: (value: Stats | PromiseLike<Stats>) => void;
-    let currentPromise: Promise<Stats>;
+  let rejectCurrent: (reason?: any) => void;
+  let resolveCurrent: (value: Stats | PromiseLike<Stats>) => void;
+  let currentPromise: Promise<Stats>;
 
-    const watching = compiler.watch({}, (err: Error | null, stats: Stats) => {
-        if (err) {
-            if (rejectCurrent) {
-                rejectCurrent(err);
-            }
+  const watching = compiler.watch({}, (err: Error | null, stats: Stats) => {
+    if (err) {
+      if (rejectCurrent) {
+        rejectCurrent(err);
+      }
 
-            // Because this is a fatal error, we don't bother resetting the promise. The watcher is dead.
-            return;
-        }
-
-        if (resolveCurrent) {
-            resolveCurrent(stats);
-        }
-        resetPromise();
-    });
-
-    function resetPromise() {
-        currentPromise = new Promise<Stats>((resolve, reject) => {
-            resolveCurrent = resolve;
-            rejectCurrent = reject;
-        });
+      // Because this is a fatal error, we don't bother resetting the promise. The watcher is dead.
+      return;
     }
 
+    if (resolveCurrent) {
+      resolveCurrent(stats);
+    }
     resetPromise();
+  });
 
-    return {
-        watching,
-        currentCompilation() {
-            return currentPromise;
-        }
-    };
+  function resetPromise() {
+    currentPromise = new Promise<Stats>((resolve, reject) => {
+      resolveCurrent = resolve;
+      rejectCurrent = reject;
+    });
+  }
+
+  resetPromise();
+
+  return {
+    watching,
+    currentCompilation() {
+      return currentPromise;
+    },
+  };
 }
 
 interface PromisifiedWatcher {
-    /**
-     * The underlying webpack 'Watching' object. You can use this to stop or inspect the watch process.
-     */
-    watching: Watching;
+  /**
+   * The underlying webpack 'Watching' object. You can use this to stop or inspect the watch process.
+   */
+  watching: Watching;
 
-    /**
-     * A promise that resolves when the next compilation completes or errors.
-     */
-    currentCompilation: () => Promise<Stats>;
+  /**
+   * A promise that resolves when the next compilation completes or errors.
+   */
+  currentCompilation: () => Promise<Stats>;
 }

@@ -1,4 +1,4 @@
-import {Configuration} from "webpack";
+import { Configuration } from "webpack";
 import path from "path";
 import * as url from "url";
 
@@ -6,60 +6,59 @@ import * as url from "url";
  * Encapsulate environment-specific configuration.
  */
 export interface BuildSupportEnvStrategy {
-    mode(): Configuration["mode"];
+  mode(): Configuration["mode"];
 
-    publicPath(): Configuration["output"]["publicPath"];
+  publicPath(): Configuration["output"]["publicPath"];
 
-    rendererPreloadEntryPoint(webpackOutputDir: string): string;
+  rendererPreloadEntryPoint(webpackOutputDir: string): string;
 
-    rendererEntryPoint(): string;
+  rendererEntryPoint(): string;
 }
 
 export class ProductionEnvStrategy implements BuildSupportEnvStrategy {
-    mode(): Configuration["mode"] {
-        return "production";
-    }
+  mode(): Configuration["mode"] {
+    return "production";
+  }
 
-    publicPath(): Configuration["output"]["publicPath"] {
-        return undefined;
-    }
+  publicPath(): Configuration["output"]["publicPath"] {
+    return undefined;
+  }
 
-    rendererPreloadEntryPoint(_webpackOutputDir: string): string {
-        return "require('path').resolve(__dirname, '../renderer/main_window/preload.js')";
-    }
+  rendererPreloadEntryPoint(_webpackOutputDir: string): string {
+    return "require('path').resolve(__dirname, '../renderer/main_window/preload.js')";
+  }
 
-    rendererEntryPoint(): string {
-        return "require('url').pathToFileURL(require('path').resolve(__dirname, '../renderer/main_window/index.html')).toString()";
-    }
+  rendererEntryPoint(): string {
+    return "require('url').pathToFileURL(require('path').resolve(__dirname, '../renderer/main_window/index.html')).toString()";
+  }
 }
 
 export class DevelopmentEnvStrategy implements BuildSupportEnvStrategy {
+  readonly #port: number;
 
-    readonly #port: number;
+  constructor(port: number) {
+    this.#port = port;
+  }
 
-    constructor(port: number) {
-        this.#port = port;
-    }
+  mode(): Configuration["mode"] {
+    return "development";
+  }
 
-    mode(): Configuration["mode"] {
-        return "development";
-    }
+  publicPath(): Configuration["output"]["publicPath"] {
+    return "/";
+  }
 
-    publicPath(): Configuration["output"]["publicPath"] {
-        return "/";
-    }
+  rendererPreloadEntryPoint(webpackOutputDir: string): string {
+    return JSON.stringify(path.resolve(webpackOutputDir, "renderer/main_window/preload.js"));
+  }
 
-    rendererPreloadEntryPoint(webpackOutputDir: string): string {
-        return JSON.stringify(path.resolve(webpackOutputDir, "renderer/main_window/preload.js"));
-    }
-
-    rendererEntryPoint(): string {
-        const entryPointUrl = url.format({
-            protocol: "http",
-            hostname: "localhost",
-            port: this.#port,
-            pathname: "main_window"
-        });
-        return JSON.stringify(entryPointUrl);
-    }
+  rendererEntryPoint(): string {
+    const entryPointUrl = url.format({
+      protocol: "http",
+      hostname: "localhost",
+      port: this.#port,
+      pathname: "main_window",
+    });
+    return JSON.stringify(entryPointUrl);
+  }
 }

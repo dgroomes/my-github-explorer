@@ -13,6 +13,7 @@ const versions = {
     graphql: "~16.8.1", // GraphQL releases: https://github.com/graphql/graphql-js/releases
     graphqlWs: "~5.14.3", // graphql-ws releases: https://github.com/enisdenjo/graphql-ws/releases
     htmlWebpackPlugin: "~5.6.0", // html-webpack-plugin releases: https://github.com/jantimon/html-webpack-plugin/blob/main/CHANGELOG.md
+    prettier: "~3.1.1", // Prettier releases: https://github.com/prettier/prettier/releases
     react: "~18.2.0", // React releases: https://legacy.reactjs.org/versions
     reactDomTypes: "~18.2.18", // @types/react-dom releases: https://www.npmjs.com/package/@types/react-dom?activeTab=versions
     reactTypes: "~18.2.46", // @types/react releases: https://www.npmjs.com/package/@types/react?activeTab=versions
@@ -57,6 +58,11 @@ generatePackageJson(".", false, {
 
         package: "DEBUG=true electron-forge package",
         make: "electron-forge make",
+
+        // Use Prettier to format the source code. I only care about formatting JS/TS code and not my HTML/CSS files.
+        // Also, we're going to cross over into the 'build-support' code and format it too. I don't want to bother
+        // setting up a separate Prettier config and step for that code.
+        format: "prettier --write 'src/**/*.{ts,tsx}' 'build-support/src/**/*.ts'",
     },
     license: "UNLICENSED",
     dependencies: {
@@ -75,6 +81,7 @@ generatePackageJson(".", false, {
         // WORKAROUND. See https://github.com/dgroomes/electron-playground/blob/d40514c2f90ac847573c02e5c90e790a4f65cb86/realistic/package-json.mjs#L91
         electron: versions.electron,
         "my-github-explorer_build-support": "file:build-support/my-github-explorer_build-support-1.0.0.tgz",
+        "prettier": versions.prettier
     },
 });
 

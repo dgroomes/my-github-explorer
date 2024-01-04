@@ -1,18 +1,18 @@
-import {PluginBase} from "@electron-forge/plugin-base";
+import { PluginBase } from "@electron-forge/plugin-base";
 import {
-    ElectronProcess,
-    ForgeMultiHookMap,
-    ResolvedForgeConfig,
-    StartOptions,
-    StartResult
+  ElectronProcess,
+  ForgeMultiHookMap,
+  ResolvedForgeConfig,
+  StartOptions,
+  StartResult,
 } from "@electron-forge/shared-types";
-import {Watching, webpack} from "webpack";
+import { Watching, webpack } from "webpack";
 import WebpackDevServer from "webpack-dev-server";
 import * as console from "console";
 import * as path from "path";
-import {webpackRunPromisified, webpackWatchPromisified} from "./webpack-util";
-import {DevelopmentEnvStrategy, ProductionEnvStrategy} from "./BuildSupportEnvStrategy";
-import {BuildSupportWebpackConfig} from "./BuildSupportWebpackConfig";
+import { webpackRunPromisified, webpackWatchPromisified } from "./webpack-util";
+import { DevelopmentEnvStrategy, ProductionEnvStrategy } from "./BuildSupportEnvStrategy";
+import { BuildSupportWebpackConfig } from "./BuildSupportWebpackConfig";
 
 /**
  * A custom Electron Forge plugin purpose-built for this project. This plugin is not designed as a generic and reusable
@@ -29,146 +29,154 @@ import {BuildSupportWebpackConfig} from "./BuildSupportWebpackConfig";
  *   - https://github.com/electron/forge/blob/b4f6dd9f8da7ba63099e4b802c59d1f56feca0cc/packages/plugin/webpack/src/WebpackPlugin.ts#L311
  */
 export class BuildSupportForgePlugin extends PluginBase<null> {
-    name: string = "BuildSupportForgePlugin";
+  name: string = "BuildSupportForgePlugin";
 
-    // This is the root directory of the project itself.
-    #rootDir: string;
+  // This is the root directory of the project itself.
+  #rootDir: string;
 
-    /*
+  /*
     This is the directory where webpack will write its output files. This is a form of an "out/" or "build/" directory.
     The official Electron Forge webpack plugin uses a convention of a ".webpack/" directory in the root of the project.
     This is not a common convention in the broader ecosystem but let's follow it here (in part because we have to for
     now, because we're still using the WebpackConfigGenerator which hard codes to that convention).
     */
-    #webpackOutputDir: string;
-    #alreadyStarted: boolean = false;
-    #devConfig: BuildSupportWebpackConfig;
-    #prodConfig: BuildSupportWebpackConfig;
-    #webpackWatching: Watching;
-    readonly #port: number;
+  #webpackOutputDir: string;
+  #alreadyStarted: boolean = false;
+  #devConfig: BuildSupportWebpackConfig;
+  #prodConfig: BuildSupportWebpackConfig;
+  #webpackWatching: Watching;
+  readonly #port: number;
 
-    constructor() {
-        super(null);
-        this.#port = 3000;
+  constructor() {
+    super(null);
+    this.#port = 3000;
 
-        // Make sure to bind class methods to this instance so that they don't become headless. In particular, the startLogic()
-        // is called with a different 'this' context in the Electron Forge code. See https://github.com/electron/forge/blob/61d398abde51a21e280e59d319d5a77dbf3f7936/packages/api/core/src/util/plugin-interface.ts#L154
-        this.startLogic = this.startLogic.bind(this);
-        this.buildForProduction = this.buildForProduction.bind(this);
-        this.registerOverallExitHandlerUponElectronExit = this.registerOverallExitHandlerUponElectronExit.bind(this);
+    // Make sure to bind class methods to this instance so that they don't become headless. In particular, the startLogic()
+    // is called with a different 'this' context in the Electron Forge code. See https://github.com/electron/forge/blob/61d398abde51a21e280e59d319d5a77dbf3f7936/packages/api/core/src/util/plugin-interface.ts#L154
+    this.startLogic = this.startLogic.bind(this);
+    this.buildForProduction = this.buildForProduction.bind(this);
+    this.registerOverallExitHandlerUponElectronExit = this.registerOverallExitHandlerUponElectronExit.bind(this);
+  }
+
+  // noinspection JSUnusedGlobalSymbols
+  init(_dir: string, _config: ResolvedForgeConfig) {
+    this.#rootDir = _dir;
+    this.#webpackOutputDir = path.resolve(this.#rootDir, ".webpack");
+    this.#devConfig = BuildSupportWebpackConfig.create(this.#rootDir, new DevelopmentEnvStrategy(this.#port));
+    this.#prodConfig = BuildSupportWebpackConfig.create(this.#rootDir, new ProductionEnvStrategy());
+    super.init(this.#rootDir, _config);
+  }
+
+  /**
+   * Build the production webpack bundles. This process is different from the dev workflow in the following ways:
+   * <pre>
+   *     - There is no watching. This is a one-shot build.
+   *     - There is no dev server.
+   *     - The bundles are minimized (I'm not sure what other optimizations webpack is doing).
+   * </pre>
+   *
+   * This method is designed to be used to build the program before handing it back off to Electron Forge for
+   * packaging. This method is NOT designed to be used for your live development workflow. The live development
+   * workflow is supported by the startLogic() method.
+   */
+  private async buildForProduction() {
+    // Because there is no watching, and no dev servers involved, we can afford to express all webpack 'Configuration'
+    // objects into the same webpack compiler object. Then, we just invoke the compiler once. We promisify the call.
+    const config = [
+      this.#prodConfig.mainProcessConfig,
+      this.#prodConfig.rendererProcessPreloadConfig,
+      this.#prodConfig.rendererProcessNormalConfig,
+    ];
+    const compiler = webpack(config);
+    const stats = await webpackRunPromisified(compiler);
+    if (stats.hasErrors()) {
+      throw new Error(
+        `Compilation failed. Please change the source code to resolve all type errors. ${stats.toString()}`,
+      );
     }
+  }
 
-    // noinspection JSUnusedGlobalSymbols
-    init(_dir: string, _config: ResolvedForgeConfig) {
-        this.#rootDir = _dir;
-        this.#webpackOutputDir = path.resolve(this.#rootDir, ".webpack");
-        this.#devConfig = BuildSupportWebpackConfig.create(this.#rootDir, new DevelopmentEnvStrategy(this.#port));
-        this.#prodConfig = BuildSupportWebpackConfig.create(this.#rootDir, new ProductionEnvStrategy());
-        super.init(this.#rootDir, _config);
-    }
+  // noinspection JSUnusedGlobalSymbols
+  /**
+   * Electron Forge has a "hooks" system that allows plugins to extend the build process.
+   *
+   * See https://www.electronforge.io/config/hooks
+   * See https://www.electronforge.io/advanced/extending-electron-forge/writing-plugins
+   */
+  getHooks(): ForgeMultiHookMap {
+    return {
+      prePackage: this.buildForProduction,
+      postStart: this.registerOverallExitHandlerUponElectronExit,
+    };
+  }
 
-    /**
-     * Build the production webpack bundles. This process is different from the dev workflow in the following ways:
-     * <pre>
-     *     - There is no watching. This is a one-shot build.
-     *     - There is no dev server.
-     *     - The bundles are minimized (I'm not sure what other optimizations webpack is doing).
-     * </pre>
-     *
-     * This method is designed to be used to build the program before handing it back off to Electron Forge for
-     * packaging. This method is NOT designed to be used for your live development workflow. The live development
-     * workflow is supported by the startLogic() method.
-     */
-    private async buildForProduction() {
-        // Because there is no watching, and no dev servers involved, we can afford to express all webpack 'Configuration'
-        // objects into the same webpack compiler object. Then, we just invoke the compiler once. We promisify the call.
-        const config = [this.#prodConfig.mainProcessConfig, this.#prodConfig.rendererProcessPreloadConfig, this.#prodConfig.rendererProcessNormalConfig];
-        const compiler = webpack(config);
-        const stats = await webpackRunPromisified(compiler);
-        if (stats.hasErrors()) {
-            throw new Error(`Compilation failed. Please change the source code to resolve all type errors. ${stats.toString()}`);
-        }
-    }
+  /**
+   * Build and watch the main process bundles, and build/watch/server the renderer process bundles.
+   */
+  async startLogic(_startOpts: StartOptions): Promise<StartResult> {
+    console.log("MyForgeWebpackPlugin.startLogic() called");
 
-    // noinspection JSUnusedGlobalSymbols
-    /**
-     * Electron Forge has a "hooks" system that allows plugins to extend the build process.
-     *
-     * See https://www.electronforge.io/config/hooks
-     * See https://www.electronforge.io/advanced/extending-electron-forge/writing-plugins
-     */
-    getHooks(): ForgeMultiHookMap {
-        return {
-            prePackage: this.buildForProduction,
-            postStart: this.registerOverallExitHandlerUponElectronExit
-        };
-    }
+    if (this.#alreadyStarted) return false;
+    this.#alreadyStarted = true;
 
-    /**
-     * Build and watch the main process bundles, and build/watch/server the renderer process bundles.
-     */
-    async startLogic(_startOpts: StartOptions): Promise<StartResult> {
-        console.log("MyForgeWebpackPlugin.startLogic() called");
+    // Compile the main process bundles. The returned promise resolves when the compilation is complete.
+    const mainCompiler = webpack(this.#devConfig.mainProcessConfig);
+    const compileMainPromise = webpackWatchPromisified(mainCompiler).currentCompilation();
 
-        if (this.#alreadyStarted) return false;
-        this.#alreadyStarted = true;
+    const rendererServer = await this.rendererServer();
+    const startPromise = await rendererServer.start();
 
-        // Compile the main process bundles. The returned promise resolves when the compilation is complete.
-        const mainCompiler = webpack(this.#devConfig.mainProcessConfig);
-        const compileMainPromise = webpackWatchPromisified(mainCompiler).currentCompilation();
+    await Promise.all([compileMainPromise, startPromise]);
+    return false; // I'm not really sure what this return value means but 'false' is normal.
+  }
 
-        const rendererServer = await this.rendererServer();
-        const startPromise = await rendererServer.start();
+  /**
+   *  Create and configure a webpack compiler and webpack-dev-server for the renderer process bundles.
+   */
+  private async rendererServer(): Promise<WebpackDevServer> {
+    const compiler = webpack([
+      this.#devConfig.rendererProcessPreloadConfig,
+      this.#devConfig.rendererProcessNormalConfig,
+    ]);
 
-        await Promise.all([compileMainPromise, startPromise]);
-        return false; // I'm not really sure what this return value means but 'false' is normal.
-    }
+    const devServerConfig: WebpackDevServer.Configuration = {
+      hot: true,
+      devMiddleware: {
+        writeToDisk: true,
+      },
+      historyApiFallback: true, // Not sure what this is. I copied it from Forge's own WebpackDevServer config.
+      port: this.#port,
+      setupExitSignals: true, // Not sure what this is. I copied it from Forge's own WebpackDevServer config.
+      static: path.resolve(this.#webpackOutputDir, "renderer"), // I don't think I should qualify this anymore. Well... I haven't thought through the implications of not using two webpack compilers.
+      headers: {
+        // Breakdown of our Content-Security policy:
+        //
+        //  - We need to include 'ws:' because webpack uses WebSockets for reloading changed resources. This feature
+        //    is called Hot Module Reloading (HMR).
+        //
+        //  - We need 'unsafe-inline' for styles, because the effect of webpack's 'style-loader' is that the web page
+        //    applies its styles by some JavaScript code that appends a '<style>' element to the '<head>' element.
+        //
+        //  - We need 'data:' for fonts because GraphiQL defines some fonts in big base64 text in its CSS.
+        "Content-Security-Policy":
+          "default-src 'self' http: https: ws:; style-src-elem 'self' 'unsafe-inline'; font-src 'self' data:",
+      },
+    };
 
-    /**
-     *  Create and configure a webpack compiler and webpack-dev-server for the renderer process bundles.
-     */
-    private async rendererServer(): Promise<WebpackDevServer> {
-        const compiler = webpack([this.#devConfig.rendererProcessPreloadConfig, this.#devConfig.rendererProcessNormalConfig]);
+    return new WebpackDevServer(devServerConfig, compiler);
+  }
 
-        const devServerConfig: WebpackDevServer.Configuration = {
-            hot: true,
-            devMiddleware: {
-                writeToDisk: true,
-            },
-            historyApiFallback: true, // Not sure what this is. I copied it from Forge's own WebpackDevServer config.
-            port: this.#port,
-            setupExitSignals: true, // Not sure what this is. I copied it from Forge's own WebpackDevServer config.
-            static: path.resolve(this.#webpackOutputDir, "renderer"), // I don't think I should qualify this anymore. Well... I haven't thought through the implications of not using two webpack compilers.
-            headers: {
-
-                // Breakdown of our Content-Security policy:
-                //
-                //  - We need to include 'ws:' because webpack uses WebSockets for reloading changed resources. This feature
-                //    is called Hot Module Reloading (HMR).
-                //
-                //  - We need 'unsafe-inline' for styles, because the effect of webpack's 'style-loader' is that the web page
-                //    applies its styles by some JavaScript code that appends a '<style>' element to the '<head>' element.
-                //
-                //  - We need 'data:' for fonts because GraphiQL defines some fonts in big base64 text in its CSS.
-                "Content-Security-Policy": "default-src 'self' http: https: ws:; style-src-elem 'self' 'unsafe-inline'; font-src 'self' data:"
-            },
-        };
-
-        return new WebpackDevServer(devServerConfig, compiler);
-    }
-
-    /**
-     * Register a shutdown handler that will stop the webpack watcher and exit the entire Node process. This is a
-     * preference. Specifically, when we're in our development flow, we normally make code changes and let them live
-     * reload. When we're done developing, we close the window. When we close the window, it would be nice if the whole
-     * Node process (the webpack dev server) stopped too.
-     */
-    async registerOverallExitHandlerUponElectronExit(_config: ResolvedForgeConfig, electronProcess: ElectronProcess) {
-        electronProcess.on("exit", () => {
-            if (electronProcess.restarted) return;
-            this.#webpackWatching?.close(() => {
-            });
-            process.exit();
-        });
-    }
+  /**
+   * Register a shutdown handler that will stop the webpack watcher and exit the entire Node process. This is a
+   * preference. Specifically, when we're in our development flow, we normally make code changes and let them live
+   * reload. When we're done developing, we close the window. When we close the window, it would be nice if the whole
+   * Node process (the webpack dev server) stopped too.
+   */
+  async registerOverallExitHandlerUponElectronExit(_config: ResolvedForgeConfig, electronProcess: ElectronProcess) {
+    electronProcess.on("exit", () => {
+      if (electronProcess.restarted) return;
+      this.#webpackWatching?.close(() => {});
+      process.exit();
+    });
+  }
 }

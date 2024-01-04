@@ -1,12 +1,11 @@
 export declare global {
-    interface ErrorConstructor {
-
-        /**
-         * For some reason, the {@link Error} type definition doesn't include the constructor signature that takes the
-         * `options` parameter. Let's add it.
-         */
-        new(message: string, options?: { cause?: Error }): Error;
-    }
+  interface ErrorConstructor {
+    /**
+     * For some reason, the {@link Error} type definition doesn't include the constructor signature that takes the
+     * `options` parameter. Let's add it.
+     */
+    new (message: string, options?: { cause?: Error }): Error;
+  }
 }
 
 /**
@@ -20,12 +19,11 @@ export interface IpcApi {
 }
 
 declare global {
-    interface Window {
-
-        /**
-         * This is the IPC API that's exposed to the web page. I haven't bothered defining this type in a separate
-         * compilation unit from the main process code or the preload script code, but in a perfect world, I might.
-         */
-        api: IpcApi;
-    }
+  interface Window {
+    /**
+     * This is the IPC API that's exposed to the web page. I haven't bothered defining this type in a separate
+     * compilation unit from the main process code or the preload script code, but in a perfect world, I might.
+     */
+    api: IpcApi;
+  }
 }

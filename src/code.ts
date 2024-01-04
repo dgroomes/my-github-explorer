@@ -7,19 +7,18 @@ Miscellaneous code that I don't know/care where to put.
 // union over a combination of strings and interfaces (and other types).
 //
 // It didn't come naturally, but I think I'm building an intuition for it.
-export type TokenState = 'restoring' | 'empty' | EnteredToken | ValidatedToken
+export type TokenState = "restoring" | "empty" | EnteredToken | ValidatedToken;
 
 export interface EnteredToken {
-    kind: 'partial' | 'entered' | 'restored' | 'invalid'
-    token: string
+  kind: "partial" | "entered" | "restored" | "invalid";
+  token: string;
 }
 
 export interface ValidatedToken {
-    kind: 'valid' | 'storing'
-    token: string
-    login: string
+  kind: "valid" | "storing";
+  token: string;
+  login: string;
 }
-
 
 /**
  * Create a logger function that prepends the current time and the name of the logger.
@@ -36,8 +35,8 @@ export interface ValidatedToken {
  * @param name
  */
 export function logger(name: string) {
-    return function (...args: any[]) {
-        const time = new Date().toISOString();
-        console.log(`${time} [${name}] - `, ...args);
-    }
+  return function (...args: any[]) {
+    const time = new Date().toISOString();
+    console.log(`${time} [${name}] - `, ...args);
+  };
 }

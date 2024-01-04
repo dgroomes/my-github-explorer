@@ -16,7 +16,13 @@ const versions = {
     prettier: "~3.1.1", // Prettier releases: https://github.com/prettier/prettier/releases
     react: "~18.2.0", // React releases: https://legacy.reactjs.org/versions
     reactDomTypes: "~18.2.18", // @types/react-dom releases: https://www.npmjs.com/package/@types/react-dom?activeTab=versions
+    reactRedux: "~8.1.2", // React Redux releases: https://github.com/reduxjs/react-redux/releases
     reactTypes: "~18.2.46", // @types/react releases: https://www.npmjs.com/package/@types/react?activeTab=versions
+
+    // We're sticking with RTK v1. While the v2 release is exciting, it's too new for me. I need to gear up for that, and
+    // I'm concerned things like Redux DevTools won't work with it yet. Plus Googleability is a concern.
+    reduxToolkit: "~1.9.7", // Redux Toolkit releases: https://github.com/reduxjs/redux-toolkit/releases
+
     styleLoader: "~3.3.3", // style-loader releases: https://github.com/webpack-contrib/style-loader/releases
     tsLoader: "~9.5.1", // ts-loader releases: https://github.com/TypeStrong/ts-loader/releases
     typescript: "~5.3", // TypeScript releases: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-2.html
@@ -74,6 +80,8 @@ generatePackageJson(".", false, {
         "graphql-ws": versions.graphqlWs,
         "react": versions.react,
         "react-dom": versions.react,
+        "react-redux": versions.reactRedux,
+        "@reduxjs/toolkit": versions.reduxToolkit,
     },
     devDependencies: {
         "@types/react": versions.reactTypes,

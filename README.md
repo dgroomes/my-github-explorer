@@ -13,6 +13,8 @@ complex integration scenarios emerge. This project is an SPA that uses the GitHu
 components to fetch metadata about repositories and present it using React. It also uses Redux and Electron. The amount
 of side-effecting, stateful code and UI complexity is enough to really showcase how this tech works.
 
+This is not an endorsement for any of these technologies.
+
 
 ## Instructions
 
@@ -92,9 +94,19 @@ General clean-ups, todos and things I wish to implement for this project:
 * [ ] Consider paginating through the results. This would be a cool application because we would see the table size grow.
 * [ ] Show the pre-constructed queries in codemirror (using a GraphiQL component). We want the syntax highlighting. Can
   we make them read-only?
-* [ ] Use Redux. I think I want to use Redux Sagas specifically. I don't grok Redux. I need to learn it an app that
+* [ ] IN PROGRESS Use Redux. I think I want to use Redux Sagas specifically. I don't grok Redux. I need to learn it an app that
   "does real things" like make HTTP requests and handles a rich UI. Hopefully I'll get it. I'm expecting the Redux
   devtools will be particularly useful, but jury is out.
+   * DONE Start by bringing in the dependencies and maybe doing a "hello world".
+   * DONE Port one instance of `setState` to Redux. The lowest level (the leaf node) is where `useEffect` uses `setState`.
+     We'll port over all other usages and the `useEffect` usages in a later task.
+     * DONE Redux wants only serializable data in the state. Makes sense (although profoundly limiting; but
+       constraints can be good). Take only what I need in place of the `Response`
+       object.
+   * Redux dev tools
+   * Port everything else to Redux
+   * Add in Sagas (also "hello world")
+   * Here is the real experiment: can we figure out how to implement the logic in Sagas?
 * [ ] Consider enforcing `noImplicitAny`
 * [x] DONE Consider adding Prettier or something. I'm mostly annoyed with arbitrarily using double and single quotes and using
   and not using semicolons.
@@ -139,3 +151,7 @@ General clean-ups, todos and things I wish to implement for this project:
     the 'unmounted' check to do things "the right way". I think I am going to do this. Now, I'm realizing this should
     really be in my `react-playground` repo but for now it's ok. Progress. Functional programming is nice but hey we
     have tons of I/O and stateful stuff.
+* <https://github.com/dgroomes/electron-playground>
+* <https://github.com/dgroomes/react-playground>
+* <https://github.com/dgroomes/redux-playground>
+* <https://github.com/dgroomes/graphiql-playground>

@@ -45,22 +45,21 @@ function MyDashboardComponent(props) {
 }
  */
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { logger } from "./code";
+import { useAppDispatch, useAppSelector } from "./hooks";
+import { FetchState, setFetchState } from "./monolithicSlice";
 
 const log = logger("useFetch");
 
-export function useFetch(
-  fetchParams: { input: RequestInfo | URL; init?: RequestInit } | "no-op",
-): "untriggered" | "in-flight" | Error | { response: Response; json: string } {
+export function useFetch(fetchParams: { input: RequestInfo | URL; init?: RequestInit } | "no-op"): FetchState {
   if (fetchParams === "no-op") {
     log("Invoked as a no-op.");
   } else {
     log("Invoked with fetch parameters.");
   }
-  let [state, setState] = useState<"untriggered" | "in-flight" | Error | { response: Response; json: string }>(
-    "untriggered",
-  );
+  const dispatch = useAppDispatch();
+  let state = useAppSelector((state) => state.monolithic.fetchState);
 
   useEffect(() => {
     if (fetchParams === "no-op") {
@@ -80,8 +79,8 @@ export function useFetch(
     if (state === "untriggered") {
       // This is not idiomatic. I'm confused, but I'm going to carry on so I can "learn by doing".
       log("Untriggered. Ready to execute the fetch request. Setting state to 'in-flight'.");
-      state = "in-flight";
-      setState(state);
+      state = "in-flight"; // this reassignment is odd. revisit.
+      dispatch(setFetchState(state));
     }
 
     const { input, init } = fetchParams;
@@ -110,13 +109,13 @@ export function useFetch(
           );
 
         return res.json().then((json) => {
-          setState({ response: res, json });
+          dispatch(setFetchState({ kind: "response", status: res.status, json }));
         });
       })
       .catch((err) => {
         log("The 'fetch' request failed.", { err });
         if (isMounted && !signal.aborted) {
-          setState(err);
+          dispatch(setFetchState(err));
         }
       });
 

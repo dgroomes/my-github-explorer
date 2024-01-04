@@ -121,9 +121,9 @@ export function useToken(): [TokenState, Dispatch<SetStateAction<TokenState>>] {
     return [token, setToken];
   }
 
-  const { response, json } = fetched;
+  const { status, json } = fetched;
 
-  if (response.status == 401) {
+  if (status == 401) {
     log("GitHub API responded with 401 Unauthorized. The token is invalid.");
     setToken({
       kind: "invalid",

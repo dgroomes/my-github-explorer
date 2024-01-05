@@ -53,11 +53,22 @@ alias my-github-explorer-reset-token='rm "$HOME/Library/Application Support/my-g
 ```
 
 
-## Instructions for React DevTools
+## Instructions for React and Redux Developer Tools
 
-When you develop a React application, you'll likely want the power of the excellent [React Developer Tools](https://react.dev/learn/react-developer-tools).
+When you develop a React or Redux application, you'll likely want the power of their excellent developer tools: [React Developer Tools](https://react.dev/learn/react-developer-tools)
+and [Redux DevTools](https://github.com/reduxjs/redux-devtools). In fact, using React and Redux come at a price and
+these tools are essential to offset the cost.
 
-Follows these instructions to install and run React Developer Tools in standalone mode and connect it to from our app:
+Because we're in an Electron environment, it's a little tricky to install browser extensions, and it's an especially
+tricky situation in 2024 with the inconsistent support for Manifest v2 and v3. Electron doesn't support Manifest v3 yet
+but React Developer Tools doesn't support v2 anymore. Tricky. Thankfully, React Develpoer Tools and Redux DevTools can
+be used outside of a browser extension, which is what we'll do here.
+
+Ideally, I want to run React Developer Tools in an Electron window, but right now I'm running via its own instance (kind of expensive).
+
+Ideally, I want to run Redux DevTools in an Electron window, but I haven't implemented that yet. See https://github.com/reduxjs/redux-devtools/tree/main/packages/redux-devtools-app  
+
+Follows these instructions to install and run React Developer Tools and connect to it from our app:
 
 1. Install React Developer Tools globally:
     * ```shell
@@ -94,7 +105,7 @@ General clean-ups, todos and things I wish to implement for this project:
 * [ ] Consider paginating through the results. This would be a cool application because we would see the table size grow.
 * [ ] Show the pre-constructed queries in codemirror (using a GraphiQL component). We want the syntax highlighting. Can
   we make them read-only?
-* [ ] IN PROGRESS Use Redux. I think I want to use Redux Sagas specifically. I don't grok Redux. I need to learn it an app that
+* [ ] HOLD (I want to wire in Redux dev tools before I do more conversion) Use Redux. I think I want to use Redux Sagas specifically. I don't grok Redux. I need to learn it an app that
   "does real things" like make HTTP requests and handles a rich UI. Hopefully I'll get it. I'm expecting the Redux
   devtools will be particularly useful, but jury is out.
    * DONE Start by bringing in the dependencies and maybe doing a "hello world".
@@ -103,10 +114,12 @@ General clean-ups, todos and things I wish to implement for this project:
      * DONE Redux wants only serializable data in the state. Makes sense (although profoundly limiting; but
        constraints can be good). Take only what I need in place of the `Response`
        object.
-   * Redux dev tools
    * Port everything else to Redux
    * Add in Sagas (also "hello world")
    * Here is the real experiment: can we figure out how to implement the logic in Sagas?
+* [ ] Run React Developer Tools within a window in our Electron program. The main reason I want to do this is that it
+  will help me do the same for Redux DevTool, which doesn't have a standalone mode like React Developer Tools
+* [ ] Redux DevTools
 * [ ] Consider enforcing `noImplicitAny`
 * [x] DONE Consider adding Prettier or something. I'm mostly annoyed with arbitrarily using double and single quotes and using
   and not using semicolons.

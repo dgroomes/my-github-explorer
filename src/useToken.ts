@@ -1,5 +1,7 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { logger, TokenState } from "./code";
+import { Dispatch, SetStateAction, useEffect } from "react";
+import { TokenState, logger } from "./code";
+import { useAppDispatch, useAppSelector } from "./hooks";
+import { setShouldStoreAfterValidation, setToken } from "./monolithicSlice";
 
 const log = logger("useToken");
 
@@ -11,10 +13,11 @@ const log = logger("useToken");
  * gets used. If not, the hook waits on the user to enter a token in the UI. After a token is restored or entered, the
  * hook validates it using the GitHub API. The hook gives the validated token the backend via IPC to store it.
  */
-export function useToken(): [TokenState, Dispatch<SetStateAction<TokenState>>] {
+export function useToken(): TokenState {
   log("Invoked.");
-  const [token, setToken] = useState<TokenState>("restoring");
-  const [shouldStoreAfterValidation, setShouldStoreAfterValidation] = useState(false);
+  const dispatch = useAppDispatch();
+  const token = useAppSelector((state) => state.monolithic.tokenState);
+  const shouldStoreAfterValidation = useAppSelector((state) => state.monolithic.shouldStoreAfterValidation);
   if (typeof token === "object") {
     log({ kind: token.kind });
   } else if (token === "empty") {
@@ -30,29 +33,28 @@ export function useToken(): [TokenState, Dispatch<SetStateAction<TokenState>>] {
       .getPersonalAccessToken()
       .then((token) => {
         if (token === null) {
-          log("No token was found.");
-          setToken("empty");
-          setShouldStoreAfterValidation(true);
+          log("No token found. Token not restored.");
+          dispatch(setToken("empty"));
+          dispatch(setShouldStoreAfterValidation(true));
         } else {
-          log("A token was found.");
-          setToken({
-            kind: "restored",
-            token: token,
-          });
+          log("A token was found. Token restored.");
+          dispatch(setToken({ kind: "restored", token: token }));
         }
       })
       .catch((err) => {
         log("Something went wrong while trying to get the token from the backend via IPC.", { err });
-        setToken({
-          kind: "error",
-          error: err,
-        });
+        dispatch(
+          setToken({
+            kind: "error",
+            error: err,
+          }),
+        );
       });
   }, [token]);
 
   useEffect(() => {
     if (typeof token === "object" && (token.kind === "entered" || token.kind === "restored")) {
-      setToken({ kind: "validating", token: token.token });
+      dispatch(setToken({ kind: "validating", token: token.token }));
       const query = `
   query {
     viewer {
@@ -76,10 +78,12 @@ export function useToken(): [TokenState, Dispatch<SetStateAction<TokenState>>] {
           log("The 'fetch' request completed.");
           if (res.status == 401) {
             log("GitHub API responded with 401 Unauthorized. The token is invalid.");
-            setToken({
-              kind: "invalid",
-              token: token.token,
-            });
+            dispatch(
+              setToken({
+                kind: "invalid",
+                token: token.token,
+              }),
+            );
             return;
           }
 
@@ -98,25 +102,31 @@ export function useToken(): [TokenState, Dispatch<SetStateAction<TokenState>>] {
 
           // Note: this is verbose and circuitous...
           if (shouldStoreAfterValidation) {
-            setToken({
-              kind: "storing",
-              token: token.token,
-              login: login,
-            });
+            dispatch(
+              setToken({
+                kind: "storing",
+                token: token.token,
+                login: login,
+              }),
+            );
           } else {
-            setToken({
-              kind: "valid",
-              token: token.token,
-              login: login,
-            });
+            dispatch(
+              setToken({
+                kind: "valid",
+                token: token.token,
+                login: login,
+              }),
+            );
           }
         })
         .catch((err) => {
           log(err);
-          setToken({
-            kind: "error",
-            error: "An unexpected error occurred while validating the token. See the console logs for more details.",
-          });
+          dispatch(
+            setToken({
+              kind: "error",
+              error: "An unexpected error occurred while validating the token. See the console logs for more details.",
+            }),
+          );
         });
     }
   }, [token]);
@@ -127,21 +137,19 @@ export function useToken(): [TokenState, Dispatch<SetStateAction<TokenState>>] {
         .savePersonalAccessToken(token.token)
         .then(() => {
           log("The token was stored to the backend via IPC.");
-          setToken({
-            kind: "valid",
-            token: token.token,
-            login: token.login,
-          });
+          dispatch(setToken({ kind: "valid", token: token.token, login: token.login }));
         })
         .catch((e) => {
           log("Something went wrong while trying to save the token to the backend via IPC.", { e });
-          setToken({
-            kind: "error",
-            error: "An unexpected error occurred while saving the token.",
-          });
+          dispatch(
+            setToken({
+              kind: "error",
+              error: "An unexpected error occurred while saving the token.",
+            }),
+          );
         });
     }
   }, [token]);
 
-  return [token, setToken];
+  return token;
 }

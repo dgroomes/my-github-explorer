@@ -119,7 +119,7 @@ General clean-ups, todos and things I wish to implement for this project:
 * [ ] Consider paginating through the results. This would be a cool application because we would see the table size grow.
 * [ ] Show the pre-constructed queries in codemirror (using a GraphiQL component). We want the syntax highlighting. Can
   we make them read-only?
-* [ ] HOLD (I want to wire in Redux dev tools before I do more conversion) Use Redux. I think I want to use Redux Sagas specifically. I don't grok Redux. I need to learn it an app that
+* [x] DONE Use Redux. I think I want to use Redux Sagas specifically. I don't grok Redux. I need to learn it an app that
   "does real things" like make HTTP requests and handles a rich UI. Hopefully I'll get it. I'm expecting the Redux
   devtools will be particularly useful, but jury is out.
    * DONE Start by bringing in the dependencies and maybe doing a "hello world".
@@ -128,9 +128,9 @@ General clean-ups, todos and things I wish to implement for this project:
      * DONE Redux wants only serializable data in the state. Makes sense (although profoundly limiting; but
        constraints can be good). Take only what I need in place of the `Response`
        object.
-   * Port everything else to Redux
-   * Add in Sagas (also "hello world")
-   * Here is the real experiment: can we figure out how to implement the logic in Sagas?
+   * DONE Port everything else to Redux (but don't get into Sagas yet)
+* [ ] Port to Redux Sagas
+   * This is the real experiment: can we actually figure out how to implement the logic in Sagas?
 * [x] DONE Add Redux DevTools.
    * Note: I completely misread the docs. I thought there was no standalone launcher for Redux DevTools, but there is.
      It's called redux-devtools-cil.
@@ -147,7 +147,12 @@ General clean-ups, todos and things I wish to implement for this project:
   state from the render function. Totally (well 80%) makes sense to me, so I'll fix it. This is part of the process of
   grokking React. The trouble is in `useToken`. At this time, it's time to drop `useFetch` which I had previously marked
   as deprecated. It's so hard to make this work.
-* [x] DONE More robust error handling. We at least want to model basic error states and propage a basic message.
+* [x] DONE More robust error handling. We at least want to model basic error states and propagate a basic message.
+* [ ] Figure out some trick to prevent the app from initializing until Redux DevTools have attached. I don't think I'm getting
+  all the early action history which is a shame. If I can get a comprehensive history, then I can delete some of the log
+  statements.
+* [ ] Defect. The validation request is doubling. I mean I imagine this is because of React strict mode. How am should I deal
+  with this?
 
 
 ## Finished Wish List Items

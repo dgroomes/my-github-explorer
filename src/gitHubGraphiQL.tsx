@@ -4,6 +4,8 @@ import { createGraphiQLFetcher } from "@graphiql/toolkit";
 import { Alert, Button, Input, Space, Spin } from "antd";
 import { useToken } from "./useToken";
 import { logger } from "./code";
+import { useAppDispatch } from "./hooks";
+import { setToken } from "./monolithicSlice";
 
 const log = logger("GitHubGraphiQL");
 
@@ -15,7 +17,8 @@ const log = logger("GitHubGraphiQL");
  */
 export default function GitHubGraphiQL() {
   log("Invoked.");
-  const [token, setToken] = useToken();
+  const dispatch = useAppDispatch();
+  const token = useToken();
   if (typeof token === "object") {
     log({ kind: token.kind });
   } else if (token === "empty") {
@@ -31,10 +34,7 @@ export default function GitHubGraphiQL() {
           placeholder="input GitHub personal access token"
           visibilityToggle={false}
           onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
-            setToken({
-              kind: "partial",
-              token: e.target.value,
-            });
+            dispatch(setToken({ kind: "partial", token: e.target.value }));
           }}
         />
         <Button disabled={true}> Submit</Button>
@@ -78,13 +78,10 @@ export default function GitHubGraphiQL() {
             placeholder="input GitHub personal access token"
             visibilityToggle={false}
             onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setToken({
-                kind: "partial",
-                token: e.target.value,
-              });
+              dispatch(setToken({ kind: "partial", token: e.target.value }));
             }}
           />
-          <Button onClick={() => setToken({ kind: "entered", token: token.token })}>Submit</Button>
+          <Button onClick={() => dispatch(setToken({ kind: "entered", token: token.token }))}>Submit</Button>
         </Space>
       );
     } else {

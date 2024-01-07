@@ -10,15 +10,11 @@ const log = logger("useToken");
  * {@link useToken} starts by trying to recover a previously saved token from the backend via IPC. If there is one, it
  * gets used. If not, the hook waits on the user to enter a token in the UI. After a token is restored or entered, the
  * hook validates it using the GitHub API. The hook gives the validated token the backend via IPC to store it.
- *
- * Modeling "restoring" on {@link TokenState} is not symmetrical to modeling "isFetching" inside this hook. Consider
- * refactoring this.
  */
 export function useToken(): [TokenState, Dispatch<SetStateAction<TokenState>>] {
   log("Invoked.");
   const [token, setToken] = useState<TokenState>("restoring");
   const [shouldStoreAfterValidation, setShouldStoreAfterValidation] = useState(false);
-  const [isFetching, setIsFetching] = useState(false);
   if (typeof token === "object") {
     log({ kind: token.kind });
   } else if (token === "empty") {
@@ -30,24 +26,33 @@ export function useToken(): [TokenState, Dispatch<SetStateAction<TokenState>>] {
   useEffect(() => {
     if (token !== "restoring") return;
 
-    window.api.getPersonalAccessToken().then((token) => {
-      if (token === null) {
-        log("No token was found.");
-        setToken("empty");
-        setShouldStoreAfterValidation(true);
-      } else {
-        log("A token was found.");
+    window.api
+      .getPersonalAccessToken()
+      .then((token) => {
+        if (token === null) {
+          log("No token was found.");
+          setToken("empty");
+          setShouldStoreAfterValidation(true);
+        } else {
+          log("A token was found.");
+          setToken({
+            kind: "restored",
+            token: token,
+          });
+        }
+      })
+      .catch((err) => {
+        log("Something went wrong while trying to get the token from the backend via IPC.", { err });
         setToken({
-          kind: "restored",
-          token: token,
+          kind: "error",
+          error: err,
         });
-      }
-    });
+      });
   }, [token]);
 
   useEffect(() => {
     if (typeof token === "object" && (token.kind === "entered" || token.kind === "restored")) {
-      setIsFetching(true);
+      setToken({ kind: "validating", token: token.token });
       const query = `
   query {
     viewer {
@@ -78,6 +83,12 @@ export function useToken(): [TokenState, Dispatch<SetStateAction<TokenState>>] {
             return;
           }
 
+          if (res.status != 200) {
+            return res.text().then((text) => {
+              throw new Error(`Unexpected response from GitHub API. HTTP status: ${res.status}. Message: ${text}`);
+            });
+          }
+
           return res.json();
         })
 
@@ -101,8 +112,11 @@ export function useToken(): [TokenState, Dispatch<SetStateAction<TokenState>>] {
           }
         })
         .catch((err) => {
-          log("The 'fetch' request failed.", { err });
-          // TODO Set token state to an error so that the using component can render user-friendly error message
+          log(err);
+          setToken({
+            kind: "error",
+            error: "An unexpected error occurred while validating the token. See the console logs for more details.",
+          });
         });
     }
   }, [token]);
@@ -119,7 +133,13 @@ export function useToken(): [TokenState, Dispatch<SetStateAction<TokenState>>] {
             login: token.login,
           });
         })
-        .catch((e) => log("Something went wrong while trying to save the token to the backend via IPC.", { e }));
+        .catch((e) => {
+          log("Something went wrong while trying to save the token to the backend via IPC.", { e });
+          setToken({
+            kind: "error",
+            error: "An unexpected error occurred while saving the token.",
+          });
+        });
     }
   }, [token]);
 

@@ -147,6 +147,7 @@ General clean-ups, todos and things I wish to implement for this project:
   state from the render function. Totally (well 80%) makes sense to me, so I'll fix it. This is part of the process of
   grokking React. The trouble is in `useToken`. At this time, it's time to drop `useFetch` which I had previously marked
   as deprecated. It's so hard to make this work.
+* [x] DONE More robust error handling. We at least want to model basic error states and propage a basic message.
 
 
 ## Finished Wish List Items
@@ -175,7 +176,6 @@ General clean-ups, todos and things I wish to implement for this project:
 * [x] DONE Upgrade dependencies.
 * [x] DONE (GraphiQL defines fonts in data URLs) Why are there HTTP request failures to download fonts? E.g. `data:font/woff2;base64,` etc. This happens when
   serving but not in the production app.
-* [ ] More robust error handling. We at least want to model basic error states and propage a basic message.
 
 
 ## Reference

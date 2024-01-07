@@ -57,7 +57,14 @@ export default function GitHubGraphiQL() {
           showIcon
         />
       );
-    } else if (token.kind === "restored" || token.kind === "entered" || token.kind === "storing") {
+    } else if (token.kind === "error") {
+      return <Alert message="Error" description={token.error} type="error" showIcon />;
+    } else if (
+      token.kind === "restored" ||
+      token.kind === "entered" ||
+      token.kind === "validating" ||
+      token.kind === "storing"
+    ) {
       return (
         <Space direction="horizontal">
           <Input.Password readOnly={true} disabled={true} visibilityToggle={false} placeholder="Validating token..." />

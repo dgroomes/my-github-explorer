@@ -143,6 +143,10 @@ General clean-ups, todos and things I wish to implement for this project:
   and not using semicolons.
 * [x] DONE (fixed, but `useFetch` now doesn't make sense. How do people do this? Just ignore unmounts for the clean up function?)
       Defect: validation fetch request is getting cancelled prematurely. My `useFetch` must be buggy.
+* [x] DONE Stop setting state from render function. During the redux conversion, I started getting warnings about setting
+  state from the render function. Totally (well 80%) makes sense to me, so I'll fix it. This is part of the process of
+  grokking React. The trouble is in `useToken`. At this time, it's time to drop `useFetch` which I had previously marked
+  as deprecated. It's so hard to make this work.
 
 
 ## Finished Wish List Items
@@ -171,6 +175,7 @@ General clean-ups, todos and things I wish to implement for this project:
 * [x] DONE Upgrade dependencies.
 * [x] DONE (GraphiQL defines fonts in data URLs) Why are there HTTP request failures to download fonts? E.g. `data:font/woff2;base64,` etc. This happens when
   serving but not in the production app.
+* [ ] More robust error handling. We at least want to model basic error states and propage a basic message.
 
 
 ## Reference

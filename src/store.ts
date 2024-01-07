@@ -1,13 +1,15 @@
-import {configureStore} from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import monolithicReducer from "./monolithicSlice";
 // @ts-ignore
-import {customizeWebpackConfigForDevelopment} from "redux-config-customizer";
+import { customizeWebpackConfigForDevelopment } from "redux-config-customizer";
 
-export const store = configureStore(customizeWebpackConfigForDevelopment({
-  reducer: {
-    monolithic: monolithicReducer,
-  }
-}));
+export const store = configureStore(
+  customizeWebpackConfigForDevelopment({
+    reducer: {
+      monolithic: monolithicReducer,
+    },
+  }),
+);
 
 // I don't understand how this works, but this is needed when using Redux Toolkit with TypeScript.
 // See https://redux.js.org/tutorials/typescript-quick-start

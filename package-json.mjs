@@ -18,9 +18,10 @@ const versions = {
     reactDomTypes: "~18.2.18", // @types/react-dom releases: https://www.npmjs.com/package/@types/react-dom?activeTab=versions
     reactRedux: "~8.1.2", // React Redux releases: https://github.com/reduxjs/react-redux/releases
     reactTypes: "~18.2.46", // @types/react releases: https://www.npmjs.com/package/@types/react?activeTab=versions
+    reduxDevToolsRemote: "0.8.2", // Redux DevTools releases: https://github.com/reduxjs/redux-devtools/releases
 
-    // We're sticking with RTK v1. While the v2 release is exciting, it's too new for me. I need to gear up for that, and
-    // I'm concerned things like Redux DevTools won't work with it yet. Plus Googleability is a concern.
+    // We're sticking with RTK v1. While the v2 release is exciting, the "remote" package of Redux DevTools hasn't been
+    // updated to support v2 yet.
     reduxToolkit: "~1.9.7", // Redux Toolkit releases: https://github.com/reduxjs/redux-toolkit/releases
 
     styleLoader: "~3.3.3", // style-loader releases: https://github.com/webpack-contrib/style-loader/releases
@@ -58,9 +59,10 @@ generatePackageJson(".", false, {
     scripts: {
         start: "DEBUG=true electron-forge start",
 
-        // Start the app in a configuration that will connect to the external/standalone React Developer Tools instance.
-        // You must have already started the React Developer Tools app before running this command.
-        "start:react-devtools": "MY_GITHUB_EXPLORER_CONNECT_TO_REACT_DEVTOOLS=true electron-forge start",
+        // Start the app in a configuration that will connect to the standalone React Developer Tools server and the
+        // Redux DevTools servers. You must have already started these dev tools servers app before running this command.
+        // See the README for more information.
+        "start:with-devtools": "MY_GITHUB_EXPLORER_WITH_DEVTOOLS=true electron-forge start",
 
         package: "DEBUG=true electron-forge package",
         make: "electron-forge make",
@@ -81,6 +83,7 @@ generatePackageJson(".", false, {
         "react": versions.react,
         "react-dom": versions.react,
         "react-redux": versions.reactRedux,
+        "@redux-devtools/remote": versions.reduxDevToolsRemote,
         "@reduxjs/toolkit": versions.reduxToolkit,
     },
     devDependencies: {

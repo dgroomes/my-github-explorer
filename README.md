@@ -21,7 +21,7 @@ This is not an endorsement for any of these technologies.
 Follow these instructions to build and serve the application:
 
 1. Pre-requisite: Node.js
-    * I used Node v20
+    * I used Node v20.9.0
 2. Pre-requisite: `build-support`
     * **Important**: The `build-support` library must be built before you can develop the main application. Follow the
       instructions in the [`build-support` README](build-support/README.md). You only need to do this the first time and
@@ -61,27 +61,41 @@ these tools are essential to offset the cost.
 
 Because we're in an Electron environment, it's a little tricky to install browser extensions, and it's an especially
 tricky situation in 2024 with the inconsistent support for Manifest v2 and v3. Electron doesn't support Manifest v3 yet
-but React Developer Tools doesn't support v2 anymore. Tricky. Thankfully, React Develpoer Tools and Redux DevTools can
-be used outside of a browser extension, which is what we'll do here.
+but React Developer Tools doesn't support v2 anymore. Tricky. Thankfully, React Developer Tools and Redux DevTools can
+each be run in a *standalone mode* by way of their npm-distributed CLI programs:
 
-Ideally, I want to run React Developer Tools in an Electron window, but right now I'm running via its own instance (kind of expensive).
+* [`react-devtools`](https://github.com/facebook/react/blob/main/packages/react-devtools/README.md)
+* [`@redux-devtools/cli`](https://github.com/reduxjs/redux-devtools/tree/main/packages/redux-devtools-cli)
 
-Ideally, I want to run Redux DevTools in an Electron window, but I haven't implemented that yet. See https://github.com/reduxjs/redux-devtools/tree/main/packages/redux-devtools-app  
+My preference is to run these standalone tools. By contrast, I am interested in using [browser extensions in Electron](https://www.electronjs.org/docs/latest/api/extensions),
+but I'm not ready to figure out the compatibility workarounds (aforementioned v2/v3 quagmire).  
 
-Follows these instructions to install and run React Developer Tools and connect to it from our app:
+Follows these instructions to install and run the developer tools and connect to them from our app:
 
-1. Install React Developer Tools globally:
+1. Install the tools globally:
     * ```shell
-      npm install -g react-devtools
+      npm install -g react-devtools @redux-devtools/cli@3.0.2
       ```
 2. Run React Developer Tools in standalone mode:
     * ```shell
       react-devtools
       ```
-3. Run our app but with a special flag to connect to the standalone React Developer Tools:
+3. Run a Redux DevTools server, and establish a connection from the web app
     * ```shell
-      npm run start:react-devtools
+      redux-devtools --open=browser --port=8000 --hostname=127.0.0.1
       ```
+    * This starts the server and opens your web browser to <http://127.0.0.1:8000>. You need to configure the web app to
+      connect to the server by going to the "Settings" tab and then clicking the "Use local (custom) server" radio button
+      and clicking the "Connect" button.
+4. Run our app but with a special flag to connect to the standalone React Developer Tools:
+    * ```shell
+      npm run start:with-devtools
+      ```
+5. Inspect the React components and Redux state.
+    * Go back to the web app that hosts the Redux DevTools UI and **refresh the page** (I don't get why this is necessary).
+    * You'll see the Redux state and state history of the program.
+    * Go to the React Developer Tools Electron window and inspect the React components.
+    * Develop -> Debug -> Develop -> Debug etc...
 
 
 ## Wish List
@@ -117,9 +131,13 @@ General clean-ups, todos and things I wish to implement for this project:
    * Port everything else to Redux
    * Add in Sagas (also "hello world")
    * Here is the real experiment: can we figure out how to implement the logic in Sagas?
-* [ ] Run React Developer Tools within a window in our Electron program. The main reason I want to do this is that it
-  will help me do the same for Redux DevTool, which doesn't have a standalone mode like React Developer Tools
-* [ ] Redux DevTools
+* [x] DONE Add Redux DevTools.
+   * Note: I completely misread the docs. I thought there was no standalone launcher for Redux DevTools, but there is.
+     It's called redux-devtools-cil.
+   * DONE Add instructions for running Redux DevTools from its CLI.
+   * DONE Add Redux DevTools client side stuff and make sure it can be connected to from the dev tool instance.
+   * DONE Co-opt the `start:react-devtools` script to also start the Redux DevTools. And figure out [how to exclude
+     the package from the production build](https://github.com/reduxjs/redux-devtools/blob/main/docs/Walkthrough.md#exclude-devtools-from-production-builds). 
 * [ ] Consider enforcing `noImplicitAny`
 * [x] DONE Consider adding Prettier or something. I'm mostly annoyed with arbitrarily using double and single quotes and using
   and not using semicolons.

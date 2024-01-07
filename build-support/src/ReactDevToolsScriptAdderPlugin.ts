@@ -7,7 +7,7 @@ import { Compiler } from "webpack";
  */
 export default class ReactDevToolsScriptAdderPlugin {
   public apply(compiler: Compiler): void {
-    if (process.env.MY_GITHUB_EXPLORER_CONNECT_TO_REACT_DEVTOOLS !== "true") return;
+    if (process.env.MY_GITHUB_EXPLORER_WITH_DEVTOOLS !== "true") return;
 
     compiler.hooks.compilation.tap("ReactDevToolsScriptAdderPlugin", (compilation) => {
       HtmlWebpackPlugin.getHooks(compilation).alterAssetTags.tapPromise(

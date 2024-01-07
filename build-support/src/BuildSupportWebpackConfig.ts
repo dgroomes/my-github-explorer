@@ -178,7 +178,7 @@ class WebpackConfigGenerator {
       new ReactDevToolsScriptAdderPlugin(),
     ];
 
-    let reduxConfigCustomizerFile : string;
+    let reduxConfigCustomizerFile: string;
     if (process.env.MY_GITHUB_EXPLORER_WITH_DEVTOOLS === "true") {
       reduxConfigCustomizerFile = "./src/redux-config-customizer-with-dev-tools.ts";
     } else {
@@ -189,8 +189,8 @@ class WebpackConfigGenerator {
       // We alias the "redux-config-customizer" package so that we can bundle specific code that either connects to
       // Redux DevTools when desired or doesn't connect. We could use this pattern for other distribution variations as
       // well...
-      "redux-config-customizer": path.resolve(this.#projectDir, reduxConfigCustomizerFile)
-    }
+      "redux-config-customizer": path.resolve(this.#projectDir, reduxConfigCustomizerFile),
+    };
 
     return config;
   }

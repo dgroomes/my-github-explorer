@@ -96,21 +96,12 @@ Follows these instructions to install and run the developer tools and connect to
     * You'll see the Redux state and state history of the program.
     * Go to the React Developer Tools Electron window and inspect the React components.
     * Develop -> Debug -> Develop -> Debug etc...
-
+ 
 
 ## Wish List
 
 General clean-ups, todos and things I wish to implement for this project:
 
-* [x] DONE Get token from storage using Electron's `safeStorage` API (well safe is always relative). This involves code across
-  the main and renderer processes. Note: I've been writing hard-to-reason-about state-checking code to infer what work
-  my code needs to take next. This is awkward because we're reconstituting the transition from the state but what would
-* be more natural is if we could just do the work (or queue it up?) at the time we made the state change (i.e. transition)
-  in the first place. For example, I set state to "storing" but then at a later invocation of the render function I use
-  a combination of checking for "storing" and also `useEffects` dependencies to actually kick off the storing work. But
-  it's like... at this point we're actually doing the storing work. Should I model it as "need-to-store" and "storing"
-  and just jam descriptive states in the state? I don't really get it, but the nature of an async domain is tricky
-  regardless. 
 * [ ] (Update: maybe, maybe not) Abstract the token input/storage into a component
 * [ ] Query (search) for the current user's repositories. Hardcode to a 100 limit (which is a limit of the API; then
   you'll need pagination)
@@ -119,35 +110,9 @@ General clean-ups, todos and things I wish to implement for this project:
 * [ ] Consider paginating through the results. This would be a cool application because we would see the table size grow.
 * [ ] Show the pre-constructed queries in codemirror (using a GraphiQL component). We want the syntax highlighting. Can
   we make them read-only?
-* [x] DONE Use Redux. I think I want to use Redux Sagas specifically. I don't grok Redux. I need to learn it an app that
-  "does real things" like make HTTP requests and handles a rich UI. Hopefully I'll get it. I'm expecting the Redux
-  devtools will be particularly useful, but jury is out.
-   * DONE Start by bringing in the dependencies and maybe doing a "hello world".
-   * DONE Port one instance of `setState` to Redux. The lowest level (the leaf node) is where `useEffect` uses `setState`.
-     We'll port over all other usages and the `useEffect` usages in a later task.
-     * DONE Redux wants only serializable data in the state. Makes sense (although profoundly limiting; but
-       constraints can be good). Take only what I need in place of the `Response`
-       object.
-   * DONE Port everything else to Redux (but don't get into Sagas yet)
 * [ ] Port to Redux Sagas
    * This is the real experiment: can we actually figure out how to implement the logic in Sagas?
-* [x] DONE Add Redux DevTools.
-   * Note: I completely misread the docs. I thought there was no standalone launcher for Redux DevTools, but there is.
-     It's called redux-devtools-cil.
-   * DONE Add instructions for running Redux DevTools from its CLI.
-   * DONE Add Redux DevTools client side stuff and make sure it can be connected to from the dev tool instance.
-   * DONE Co-opt the `start:react-devtools` script to also start the Redux DevTools. And figure out [how to exclude
-     the package from the production build](https://github.com/reduxjs/redux-devtools/blob/main/docs/Walkthrough.md#exclude-devtools-from-production-builds). 
 * [ ] Consider enforcing `noImplicitAny`
-* [x] DONE Consider adding Prettier or something. I'm mostly annoyed with arbitrarily using double and single quotes and using
-  and not using semicolons.
-* [x] DONE (fixed, but `useFetch` now doesn't make sense. How do people do this? Just ignore unmounts for the clean up function?)
-      Defect: validation fetch request is getting cancelled prematurely. My `useFetch` must be buggy.
-* [x] DONE Stop setting state from render function. During the redux conversion, I started getting warnings about setting
-  state from the render function. Totally (well 80%) makes sense to me, so I'll fix it. This is part of the process of
-  grokking React. The trouble is in `useToken`. At this time, it's time to drop `useFetch` which I had previously marked
-  as deprecated. It's so hard to make this work.
-* [x] DONE More robust error handling. We at least want to model basic error states and propagate a basic message.
 * [ ] Figure out some trick to prevent the app from initializing until Redux DevTools have attached. I don't think I'm getting
   all the early action history which is a shame. If I can get a comprehensive history, then I can delete some of the log
   statements.
@@ -181,6 +146,41 @@ General clean-ups, todos and things I wish to implement for this project:
 * [x] DONE Upgrade dependencies.
 * [x] DONE (GraphiQL defines fonts in data URLs) Why are there HTTP request failures to download fonts? E.g. `data:font/woff2;base64,` etc. This happens when
   serving but not in the production app.
+* [x] DONE Get token from storage using Electron's `safeStorage` API (well safe is always relative). This involves code across
+  the main and renderer processes. Note: I've been writing hard-to-reason-about state-checking code to infer what work
+  my code needs to take next. This is awkward because we're reconstituting the transition from the state but what would
+  be more natural is if we could just do the work (or queue it up?) at the time we made the state change (i.e. transition)
+  in the first place. For example, I set state to "storing" but then at a later invocation of the render function I use
+  a combination of checking for "storing" and also `useEffects` dependencies to actually kick off the storing work. But
+  it's like... at this point we're actually doing the storing work. Should I model it as "need-to-store" and "storing"
+  and just jam descriptive states in the state? I don't really get it, but the nature of an async domain is tricky
+  regardless.
+* [x] DONE Use Redux. I think I want to use Redux Sagas specifically. I don't grok Redux. I need to learn it an app that
+  "does real things" like make HTTP requests and handles a rich UI. Hopefully I'll get it. I'm expecting the Redux
+  devtools will be particularly useful, but jury is out.
+   * DONE Start by bringing in the dependencies and maybe doing a "hello world".
+   * DONE Port one instance of `setState` to Redux. The lowest level (the leaf node) is where `useEffect` uses `setState`.
+     We'll port over all other usages and the `useEffect` usages in a later task.
+     * DONE Redux wants only serializable data in the state. Makes sense (although profoundly limiting; but
+       constraints can be good). Take only what I need in place of the `Response`
+       object.
+   * DONE Port everything else to Redux (but don't get into Sagas yet)
+* [x] DONE Add Redux DevTools.
+   * Note: I completely misread the docs. I thought there was no standalone launcher for Redux DevTools, but there is.
+     It's called redux-devtools-cil.
+   * DONE Add instructions for running Redux DevTools from its CLI.
+   * DONE Add Redux DevTools client side stuff and make sure it can be connected to from the dev tool instance.
+   * DONE Co-opt the `start:react-devtools` script to also start the Redux DevTools. And figure out [how to exclude
+     the package from the production build](https://github.com/reduxjs/redux-devtools/blob/main/docs/Walkthrough.md#exclude-devtools-from-production-builds). 
+* [x] DONE Consider adding Prettier or something. I'm mostly annoyed with arbitrarily using double and single quotes and using
+  and not using semicolons.
+* [x] DONE (fixed, but `useFetch` now doesn't make sense. How do people do this? Just ignore unmounts for the clean up function?)
+      Defect: validation fetch request is getting cancelled prematurely. My `useFetch` must be buggy.
+* [x] DONE Stop setting state from render function. During the redux conversion, I started getting warnings about setting
+  state from the render function. Totally (well 80%) makes sense to me, so I'll fix it. This is part of the process of
+  grokking React. The trouble is in `useToken`. At this time, it's time to drop `useFetch` which I had previously marked
+  as deprecated. It's so hard to make this work.
+* [x] DONE More robust error handling. We at least want to model basic error states and propagate a basic message.
 
 
 ## Reference

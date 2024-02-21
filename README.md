@@ -96,7 +96,7 @@ Follows these instructions to install and run the developer tools and connect to
     * You'll see the Redux state and state history of the program.
     * Go to the React Developer Tools Electron window and inspect the React components.
     * Develop -> Debug -> Develop -> Debug etc...
- 
+
 
 ## Wish List
 
@@ -113,11 +113,21 @@ General clean-ups, todos and things I wish to implement for this project:
 * [ ] Port to Redux Sagas
    * This is the real experiment: can we actually figure out how to implement the logic in Sagas?
 * [ ] Consider enforcing `noImplicitAny`
-* [ ] Figure out some trick to prevent the app from initializing until Redux DevTools have attached. I don't think I'm getting
+* [ ] (Is this even true? Aren't we getting all state?) Figure out some trick to prevent the app from initializing until Redux DevTools have attached. I don't think I'm getting
   all the early action history which is a shame. If I can get a comprehensive history, then I can delete some of the log
   statements.
-* [ ] Defect. The validation request is doubling. I mean I imagine this is because of React strict mode. How am should I deal
+* [ ] HOLD (I need to figure out how to do async stuff using Redux I think. So Sagas or thunk?) Defect. The validation request is doubling. I mean I imagine this is because of React strict mode. How am should I deal
   with this?
+   * Side note: I've spent about 15 minutes researching React strict mode and I can't find in the official docs, stackoverflow
+     or the source code what is meant by "strict mode only runs in development mode". Did the whole world agree that "dev web pages"
+     have a global variable named `__DEV__` (or something like that) set to `true`? 
+   * I need to not tie the fetch lifecycle to the UI component (I guess this is kind of obvious). I just want to spell it
+     out for myself. Letting the mounting of a component trigger `useEffect` is fine in some cases, but when there is
+     work/state that exists even "before" or "outside" a UI component then manage that in non-UI code (and to me the "render"
+     function, which is a React function component is a UI thing). This is continually a murky subject for me (and most).
+     OR actually, it's just silly to initialize the state to "restoring"... I should really do "init" or "untriggered"
+     (I keep revisiting this same concept...). UPDATE: I've heard the phrase "fetch on render" used in the wild and that's
+     a good description.
 
 
 ## Finished Wish List Items
@@ -187,11 +197,6 @@ General clean-ups, todos and things I wish to implement for this project:
 
 * [GitHub GraphQL API](https://docs.github.com/en/graphql)
 * [GitHub docs: *Search within a user's or organization's repositories*](https://docs.github.com/en/search-github/searching-on-github/searching-for-repositories#search-within-a-users-or-organizations-repositories)
-* [MDN docs: *AbortController*](https://developer.mozilla.org/en-US/docs/Web/API/AbortController)
-  * I just stumbled on this interesting, modern API. I'm tempted to write my `useEffect` invocations to use it and also
-    the 'unmounted' check to do things "the right way". I think I am going to do this. Now, I'm realizing this should
-    really be in my `react-playground` repo but for now it's ok. Progress. Functional programming is nice but hey we
-    have tons of I/O and stateful stuff.
 * <https://github.com/dgroomes/electron-playground>
 * <https://github.com/dgroomes/react-playground>
 * <https://github.com/dgroomes/redux-playground>

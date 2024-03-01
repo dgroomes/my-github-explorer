@@ -1,6 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
 import monolithicReducer from "./monolithicSlice";
-// @ts-ignore
 import { customizeWebpackConfigForDevelopment } from "redux-config-customizer";
 
 export const store = configureStore(

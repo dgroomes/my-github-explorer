@@ -1,7 +1,7 @@
-import { Dispatch, SetStateAction, useEffect } from "react";
-import { TokenState, logger } from "./code";
+import { useEffect } from "react";
+import { logger, TokenState } from "./code";
 import { useAppDispatch, useAppSelector } from "./hooks";
-import { setShouldStoreAfterValidation, setToken } from "./monolithicSlice";
+import { restoreToken, setToken } from "./monolithicSlice";
 
 const log = logger("useToken");
 
@@ -27,29 +27,12 @@ export function useToken(): TokenState {
   }
 
   useEffect(() => {
-    if (token !== "restoring") return;
+    // Kick-off the token restoration process. In general, we're trying to escape from 'useEffect' when we can. In
+    // particular, I've found a lot of insight from the ideas in this video: https://www.youtube.com/watch?v=HPoC-k7Rxwo
+    dispatch(restoreToken());
 
-    window.api
-      .getPersonalAccessToken()
-      .then((token) => {
-        if (token === null) {
-          log("No token found. Token not restored.");
-          dispatch(setToken("empty"));
-          dispatch(setShouldStoreAfterValidation(true));
-        } else {
-          log("A token was found. Token restored.");
-          dispatch(setToken({ kind: "restored", token: token }));
-        }
-      })
-      .catch((err) => {
-        log("Something went wrong while trying to get the token from the backend via IPC.", { err });
-        dispatch(
-          setToken({
-            kind: "error",
-            error: err,
-          }),
-        );
-      });
+    // I'm not really sure what values to use for the dependencies. I'm kind of assuming that the token will never
+    // change, which is of course not true. Tokens eventually expire.
   }, [token]);
 
   useEffect(() => {

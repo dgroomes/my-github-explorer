@@ -7,7 +7,7 @@ Miscellaneous code that I don't know/care where to put.
 // union over a combination of strings and interfaces (and other types).
 //
 // It didn't come naturally, but I think I'm building an intuition for it.
-export type TokenState = "restoring" | "empty" | EnteredToken | ValidatedToken | Error;
+export type TokenState = "init" | "restoring" | "empty" | EnteredToken | ValidatedToken | Error;
 
 export interface EnteredToken {
   kind: "partial" | "entered" | "validating" | "restored" | "invalid";

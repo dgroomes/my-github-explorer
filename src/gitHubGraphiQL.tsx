@@ -40,7 +40,7 @@ export default function GitHubGraphiQL() {
         <Button disabled={true}> Submit</Button>
       </Space>
     );
-  } else if (token === "restoring") {
+  } else if (token === "init" || token === "restoring") {
     return (
       <Space direction="horizontal">
         <Input.Password readOnly={true} disabled={true} visibilityToggle={false} placeholder="Restoring token..." />

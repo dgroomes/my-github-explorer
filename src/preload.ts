@@ -1,9 +1,12 @@
 import { contextBridge, ipcRenderer } from "electron";
 import { IpcApi } from "./types";
+import {logger} from "./code";
+
+const log = logger("preload");
 
 // See the Electron documentation for details on how to use preload scripts:
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
-console.log("Hello from 'preload.ts!'");
+log("Hello from 'preload.ts!'");
 
 const api: IpcApi = {
   getPersonalAccessToken: () => ipcRenderer.invoke("get-personal-access-token"),

@@ -2,8 +2,10 @@ import fs from "fs";
 import path from "path";
 import { app } from "electron";
 import { safeStorage } from "electron";
+import {logger} from "./code";
 
 const keyPath = path.join(app.getPath("userData"), "pat");
+const log = logger("github-personal-access-token");
 
 /**
  * Read the GitHub personal access token from the encrypted file.
@@ -16,7 +18,7 @@ export async function getPersonalAccessToken(): Promise<string | null> {
     encryptedToken = await fs.promises.readFile(keyPath);
   } catch (e) {
     if (e.code === "ENOENT") {
-      console.log(
+      log(
         "The GitHub personal access token file does not exist. This is normal if the user has never entered a token before or if it was cleared.",
       );
       return null;

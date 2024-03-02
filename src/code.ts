@@ -2,7 +2,7 @@
 Miscellaneous code that I don't know/care where to put.
 */
 
-// Well this was a bit of a learning journey to get here but I'm satisfied. I'm still building an intuition with
+// Well this was a bit of a learning journey to get here, but I'm satisfied. I'm still building an intuition with
 // unions and interfaces. It's run-of-the-mill to use a union of string (like in EnteredToken) but it's cool that I can
 // union over a combination of strings and interfaces (and other types).
 //
@@ -25,6 +25,15 @@ export interface ValidatedToken {
   login: string;
 }
 
+const TIME_FORMATTER = new Intl.DateTimeFormat("en-US", {
+  hour: "numeric",
+  minute: "numeric",
+  second: "numeric",
+  // @ts-ignore This is a legitimate option.
+  fractionalSecondDigits: 3,
+  timeZoneName: "short",
+});
+
 /**
  * Create a logger function that prepends the current time and the name of the logger.
  *
@@ -35,13 +44,13 @@ export interface ValidatedToken {
  *
  * Then you'll see something like this in the console:
  *
- *     2024-01-01T00:00:00.000Z [myLogger] - Hello world
+ *     5:12:21.266 PM CST [myLogger] - Hello world
  *
- * @param name
+ * @param name The name of the logger.
  */
 export function logger(name: string) {
-  return function (...args: any[]) {
-    const time = new Date().toISOString();
+  return function(...args: any[]) {
+    const time = TIME_FORMATTER.format(new Date());
     console.log(`${time} [${name}] - `, ...args);
   };
 }

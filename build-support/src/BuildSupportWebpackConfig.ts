@@ -166,7 +166,7 @@ class WebpackConfigGenerator {
     const config: Configuration = this.rendererProcessConfigBasis();
     this.customizeRendererProcessConfigForEnvironment(config);
 
-    config.entry = { ["main_window"]: "./src/app.tsx" };
+    config.entry = { ["main_window"]: "./src/index.tsx" };
     config.output.filename = "[name]/index.js";
     config.plugins = [
       new HtmlWebpackPlugin({

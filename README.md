@@ -126,7 +126,7 @@ General clean-ups, todos and things I wish to implement for this project:
   we use globals so brazenly?
     * DONE Consider combining more token stuff into the same file. I'm just experimenting here.
 * [ ] Bring back `useAppDispatch` now that I understand utility types better.
-* [ ] Rename `app.tsx` to `index.tsx`. I think I like the naming convention of "index" for web pages and I guess in an
+* [x] DONE Rename `app.tsx` to `index.tsx`. I think I like the naming convention of "index" for web pages and I guess in an
   Electron context the word "main" is a good convention for the main process.
 
 
@@ -138,7 +138,7 @@ General clean-ups, todos and things I wish to implement for this project:
 * [x] DONE Query for the current user's login (assuming the token is a user token)
 * [x] DONE (I like it very much) Model the PAT using some kind of types. I want to model the state machine a lot more cleanly than the mess of
   `useState` and nullability I have now.
-* [x] DONE (I accomplished an abstraction but it is not great) Abstract the "useEffect unmount clean up fetch abort" stuff into generic code. I'm assuming there must be some
+* [x] DONE (I accomplished an abstraction, but it is not great) Abstract the "useEffect unmount clean up fetch abort" stuff into generic code. I'm assuming there must be some
   concise API to derive for this common use case.
 * [x] DONE Abstract the token validation into a hook
 * [x] DONE Extract into its own repository

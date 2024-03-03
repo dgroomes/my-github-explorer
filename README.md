@@ -110,31 +110,15 @@ General clean-ups, todos and things I wish to implement for this project:
 * [ ] Consider paginating through the results. This would be a cool application because we would see the table size grow.
 * [ ] Show the pre-constructed queries in codemirror (using a GraphiQL component). We want the syntax highlighting. Can
   we make them read-only?
-* [ ] SKIP (I get the gist of this technology/paradigm but I don't see how I can be succesful/effective with it. Maybe on another project) Port to Redux Sagas
-   * This is the real experiment: can we actually figure out how to implement the logic in Sagas?
 * [ ] Consider enforcing `noImplicitAny`
 * [ ] (Is this even true? Aren't we getting all state?) Figure out some trick to prevent the app from initializing until Redux DevTools have attached. I don't think I'm getting
   all the early action history which is a shame. If I can get a comprehensive history, then I can delete some of the log
   statements.
-* [x] DONE (I used a store listener to solve this; happy with it and what I learned about Redux and RTK) (I need to figure out how to do async stuff using Redux I think. So Sagas or thunk?) Defect. The validation request is doubling. I mean I imagine this is because of React strict mode. How am should I deal
-  with this?
-   * Side note: I've spent about 15 minutes researching React strict mode and I can't find in the official docs, stackoverflow
-     or the source code what is meant by "strict mode only runs in development mode". Did the whole world agree that "dev web pages"
-     have a global variable named `__DEV__` (or something like that) set to `true`? 
-   * I need to not tie the fetch lifecycle to the UI component (I guess this is kind of obvious). I just want to spell it
-     out for myself. Letting the mounting of a component trigger `useEffect` is fine in some cases, but when there is
-     work/state that exists even "before" or "outside" a UI component then manage that in non-UI code (and to me the "render"
-     function, which is a React function component is a UI thing). This is continually a murky subject for me (and most).
-     OR actually, it's just silly to initialize the state to "restoring"... I should really do "init" or "untriggered"
-     (I keep revisiting this same concept...). UPDATE: I've heard the phrase "fetch on render" used in the wild and that's
-     a good description.
-   * UPDATE: RTK has  [`createListenerMiddleware`](https://redux-toolkit.js.org/api/createListenerMiddleware). That's what I'll use.
-   * UPDATE: Ok I am going to use a "kick-off token restoration on render" strategy. I'm using Redux listeners and state
-     so that React's strict mode double effect-triggering is countered (phew, feels good).
 * [ ] Move more code from `useEffect` to Redux listener callbacks/functions. 
 * [ ] RTK 2.0 ready? RTK 2.0 is a big upgrade, and I'm eager to upgrade. But Redux Developer Tools is not compatible with
   RTK 2.0 yet. Only upgrade when it's compatible. 
 * [ ] Where am I supposed to put Redux-coupled code? In `store.ts`, `-slice.ts`, or somewhere else?
+
 
 ## Finished Wish List Items
 
@@ -197,6 +181,23 @@ General clean-ups, todos and things I wish to implement for this project:
   grokking React. The trouble is in `useToken`. At this time, it's time to drop `useFetch` which I had previously marked
   as deprecated. It's so hard to make this work.
 * [x] DONE More robust error handling. We at least want to model basic error states and propagate a basic message.
+* [ ] SKIP (I get the gist of this technology/paradigm but I don't see how I can be succesful/effective with it. Maybe on another project) Port to Redux Sagas
+    * This is the real experiment: can we actually figure out how to implement the logic in Sagas?
+* [x] DONE (I used a store listener to solve this; happy with it and what I learned about Redux and RTK) (I need to figure out how to do async stuff using Redux I think. So Sagas or thunk?) Defect. The validation request is doubling. I mean I imagine this is because of React strict mode. How am should I deal
+  with this?
+    * Side note: I've spent about 15 minutes researching React strict mode and I can't find in the official docs, stackoverflow
+      or the source code what is meant by "strict mode only runs in development mode". Did the whole world agree that "dev web pages"
+      have a global variable named `__DEV__` (or something like that) set to `true`?
+    * I need to not tie the fetch lifecycle to the UI component (I guess this is kind of obvious). I just want to spell it
+      out for myself. Letting the mounting of a component trigger `useEffect` is fine in some cases, but when there is
+      work/state that exists even "before" or "outside" a UI component then manage that in non-UI code (and to me the "render"
+      function, which is a React function component is a UI thing). This is continually a murky subject for me (and most).
+      OR actually, it's just silly to initialize the state to "restoring"... I should really do "init" or "untriggered"
+      (I keep revisiting this same concept...). UPDATE: I've heard the phrase "fetch on render" used in the wild and that's
+      a good description.
+    * UPDATE: RTK has  [`createListenerMiddleware`](https://redux-toolkit.js.org/api/createListenerMiddleware). That's what I'll use.
+    * UPDATE: Ok I am going to use a "kick-off token restoration on render" strategy. I'm using Redux listeners and state
+      so that React's strict mode double effect-triggering is countered (phew, feels good).
 
 
 ## Reference

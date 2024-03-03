@@ -1,5 +1,5 @@
 import React from "react";
-import GitHubGraphiQL from "./gitHubGraphiQL";
+import GitHubGraphiQL from "./GitHubGraphiQL";
 
 export function MainElement() {
   return (

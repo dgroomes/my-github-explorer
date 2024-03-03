@@ -3,8 +3,8 @@ Code related to managing a GitHub personal access token.
 */
 
 import {createSlice, ListenerMiddlewareInstance, PayloadAction} from "@reduxjs/toolkit";
-import {RootState} from "./RootState";
 import {logger} from "./log";
+import {RootState} from "./types";
 
 const log = logger("token.ts");
 

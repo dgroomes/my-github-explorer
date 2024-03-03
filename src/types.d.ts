@@ -1,3 +1,5 @@
+import { TokenState } from "./token";
+
 export declare global {
   interface ErrorConstructor {
     /**
@@ -26,4 +28,8 @@ declare global {
      */
     api: IpcApi;
   }
+}
+
+export interface RootState {
+  token: TokenState;
 }

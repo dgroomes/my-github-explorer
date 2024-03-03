@@ -1,7 +1,7 @@
 import { app, BrowserWindow } from "electron";
 import path from "path";
 import fs from "fs";
-import { getPersonalAccessToken, savePersonalAccessToken } from "./github-personal-access-token";
+import { getPersonalAccessToken, savePersonalAccessToken } from "./main-token";
 import { ipcMain } from "electron";
 import {logger} from "./log";
 

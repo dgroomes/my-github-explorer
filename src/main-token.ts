@@ -4,6 +4,10 @@ import { app } from "electron";
 import { safeStorage } from "electron";
 import {logger} from "./log";
 
+/*
+This code runs in the main process and so the file name is prefixed with "main-" (my own convention).
+*/
+
 const keyPath = path.join(app.getPath("userData"), "pat");
 const log = logger("github-personal-access-token");
 

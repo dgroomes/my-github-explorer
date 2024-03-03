@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from "electron";
 import { IpcApi } from "./types";
-import {logger} from "./code";
+import {logger} from "./log";
 
 const log = logger("preload");
 

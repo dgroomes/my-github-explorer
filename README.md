@@ -121,8 +121,10 @@ General clean-ups, todos and things I wish to implement for this project:
 * [ ] RTK 2.0 ready? RTK 2.0 is a big upgrade, and I'm eager to upgrade. But Redux Developer Tools are not compatible with
   RTK 2.0 yet. Only upgrade when it's compatible. See [more info in my own extensive notes](https://github.com/dgroomes/redux-playground/blob/d2ec267b80831c1576a5db1a9408d828febce1b1/redux-devtools-remote/README.md?plain=1#L88).
 * [ ] Where am I supposed to put Redux-coupled code? In `store.ts`, `-slice.ts`, or somewhere else?
-* [ ] IN PROGRESS I'm bothered by modules that do top-level work. Does the `store.ts` file really need to be the way it is? Why do
+* [ ] IN PROGRESS: I'm bothered by modules that do top-level work. Does the `store.ts` file really need to be the way it is? Why do
   we use globals so brazenly?
+    * Consider combining more token stuff into the same file. I'm just experimenting here.
+    * Bring back `useAppDispatch` now that I understand utility types better.
 
 
 ## Finished Wish List Items

@@ -1,10 +1,13 @@
 import { useEffect } from "react";
-import { logger, TokenState } from "./code";
+import { logger } from "./log";
 import { useAppSelector } from "./hooks";
-import { restoreToken, setToken } from "./monolithicSlice";
+import { TokenSlice } from "./token-slice";
 import {useDispatch} from "react-redux";
+import {Token} from "./token";
 
 const log = logger("useToken");
+
+const { restoreToken, setToken } = TokenSlice.actions;
 
 /**
  * A custom React hook for restoring, saving and validating a GitHub personal access token.
@@ -14,10 +17,10 @@ const log = logger("useToken");
  * gets used. If not, the hook waits on the user to enter a token in the UI. After a token is restored or entered, the
  * hook validates it using the GitHub API. The hook gives the validated token the backend via IPC to store it.
  */
-export function useToken(): TokenState {
+export function useToken(): Token {
   const dispatch = useDispatch();
-  const token = useAppSelector((state) => state.monolithic.tokenState);
-  const shouldStoreAfterValidation = useAppSelector((state) => state.monolithic.shouldStoreAfterValidation);
+  const token = useAppSelector((state) => state.token.token);
+  const shouldStoreAfterValidation = useAppSelector((state) => state.token.shouldStoreAfterValidation);
 
   useEffect(() => {
     // Kick-off the token restoration process. In general, we're trying to escape from 'useEffect' when we can. In

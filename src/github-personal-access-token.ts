@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { app } from "electron";
 import { safeStorage } from "electron";
-import {logger} from "./code";
+import {logger} from "./log";
 
 const keyPath = path.join(app.getPath("userData"), "pat");
 const log = logger("github-personal-access-token");

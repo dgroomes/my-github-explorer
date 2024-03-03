@@ -1,18 +1,19 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { logger, TokenState } from "./code";
+import { logger } from "./log";
+import {Token} from "./token";
 
-export interface MonolithicState {
-  tokenState: TokenState;
+export interface TokenState {
+  token: Token;
   shouldStoreAfterValidation: boolean;
 }
 
-const initialState: MonolithicState = {
-  tokenState: "init",
+const initialState: TokenState = {
+  token: "init",
   shouldStoreAfterValidation: false,
 };
 
-export const monolithicSlice = createSlice({
-  name: "monolithic",
+export const TokenSlice = createSlice({
+  name: "token",
   initialState,
   reducers: {
     /**
@@ -23,22 +24,18 @@ export const monolithicSlice = createSlice({
     restoreToken(state) {
       const log = logger("restoreToken");
 
-      if (state.tokenState === "init") {
+      if (state.token === "init") {
         log("The token was in the initial state. It will be set to 'restoring'.");
-        state.tokenState = "restoring";
+        state.token = "restoring";
       } else {
         log("The token was already in the process of being restored or has fully restored.");
       }
     },
-    setToken(state, action: PayloadAction<TokenState>) {
-      state.tokenState = action.payload;
+    setToken(state, action: PayloadAction<Token>) {
+      state.token = action.payload;
     },
     setShouldStoreAfterValidation(state, action: PayloadAction<boolean>) {
       state.shouldStoreAfterValidation = action.payload;
     },
   },
 });
-
-export const { setToken, setShouldStoreAfterValidation, restoreToken } = monolithicSlice.actions;
-
-export default monolithicSlice.reducer;

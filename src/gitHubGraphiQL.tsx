@@ -3,11 +3,12 @@ import GraphiQL from "graphiql";
 import { createGraphiQLFetcher } from "@graphiql/toolkit";
 import { Alert, Button, Input, Space, Spin } from "antd";
 import { useToken } from "./useToken";
-import { logger } from "./code";
-import { setToken } from "./monolithicSlice";
+import { logger } from "./log";
+import { TokenSlice } from "./token-slice";
 import {useDispatch} from "react-redux";
 
 const log = logger("GitHubGraphiQL");
+const { setToken } = TokenSlice.actions;
 
 /**
  * This is one of the main components. I need to extract some of this into smaller components/hooks. I want to use the

@@ -2,7 +2,7 @@
 
 NOT YET FULLY IMPLEMENTED
 
-⏯️A toy GitHub data explorer which I'm using to explore frontend tech like GraphiQL, Redux, React, TypeScript and Electron.
+⏯️ A toy GitHub data explorer which I'm using to explore frontend tech like GraphiQL, Redux, React, TypeScript and Electron.
 
 
 ## Overview
@@ -21,7 +21,11 @@ This is not an endorsement for any of these technologies.
 Follow these instructions to build and serve the application:
 
 1. Pre-requisite: Node.js
-    * I used Node v20.9.0
+    * I used the version of Node specified in the `.nvmrc` file. If you are using `nvm` then you can run the following
+      command to use the correct version of Node.
+    * ```shell
+      nvm use
+      ```
 2. Pre-requisite: `build-support`
     * **Important**: The `build-support` library must be built before you can develop the main application. Follow the
       instructions in the [`build-support` README](build-support/README.md). You only need to do this the first time and

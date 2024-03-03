@@ -4,8 +4,8 @@ import { createGraphiQLFetcher } from "@graphiql/toolkit";
 import { Alert, Button, Input, Space, Spin } from "antd";
 import { useToken } from "./useToken";
 import { logger } from "./log";
-import { TokenSlice } from "./token-slice";
 import {useDispatch} from "react-redux";
+import {TokenSlice} from "./token";
 
 const log = logger("GitHubGraphiQL");
 const { setToken } = TokenSlice.actions;

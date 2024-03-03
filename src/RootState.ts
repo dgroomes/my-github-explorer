@@ -1,4 +1,4 @@
-import { TokenState } from "./token-slice";
+import {TokenState} from "./token";
 
 export interface RootState {
   token: TokenState;

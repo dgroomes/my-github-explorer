@@ -4,10 +4,9 @@ import ReactDOM from "react-dom/client";
 import { MainElement } from "./MainElement";
 import { Provider } from "react-redux";
 import {  RootState } from "./RootState";
-import { tokenRestoreListener } from "./listeners";
 import { configureStore, createListenerMiddleware, EnhancedStore, ListenerMiddlewareInstance } from "@reduxjs/toolkit";
 import { customizeWebpackConfigForDevelopment } from "redux-config-customizer";
-import { TokenSlice } from "./token-slice";
+import {tokenRestoreListener, TokenSlice} from "./token";
 
 const listenerMiddleware: ListenerMiddlewareInstance<RootState> = createListenerMiddleware();
 

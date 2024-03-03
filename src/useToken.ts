@@ -1,9 +1,8 @@
 import { useEffect } from "react";
 import { logger } from "./log";
 import { useAppSelector } from "./hooks";
-import { TokenSlice } from "./token-slice";
 import {useDispatch} from "react-redux";
-import {Token} from "./token";
+import {Token, TokenSlice} from "./token";
 
 const log = logger("useToken");
 

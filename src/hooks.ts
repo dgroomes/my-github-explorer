@@ -5,5 +5,8 @@ import type { RootState, AppDispatch } from "./store";
 // See https://redux.js.org/tutorials/typescript-quick-start
 //
 // (From the Redux code) Use throughout your app instead of plain `useDispatch` and `useSelector`
-export const useAppDispatch = () => useDispatch<AppDispatch>();
+export function useAppDispatch() {
+  return useDispatch<AppDispatch>();
+}
+
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

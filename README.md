@@ -102,7 +102,6 @@ Follows these instructions to install and run the developer tools and connect to
 
 General clean-ups, todos and things I wish to implement for this project:
 
-* [ ] SKIP (I don't want to do this. "Components encapsulating long-lived state" is wrong. Components are flighty because of the nature of React. I'm happy with my token state/logic in Redux, or even organic JS) Abstract the token input/storage into a component
 * [ ] Query (search) for the current user's repositories. Hardcode to a 100 limit (which is a limit of the API; then
   you'll need pagination)
 * [ ] Query (get) the metadata for each of the repositories
@@ -111,9 +110,6 @@ General clean-ups, todos and things I wish to implement for this project:
 * [ ] Show the pre-constructed queries in codemirror (using a GraphiQL component). We want the syntax highlighting. Can
   we make them read-only?
 * [ ] Consider enforcing `noImplicitAny`
-* [ ] OBSOLETE (I think this is not true. I think I am getting all the state. Refreshing the page I think is the important part) Figure out some trick to prevent the app from initializing until Redux DevTools have attached. I don't think I'm getting
-  all the early action history which is a shame. If I can get a comprehensive history, then I can delete some of the log
-  statements.
 * [ ] Move more code from `useEffect` to Redux listener callbacks/functions. 
    * Consider removing `useToken` entirely. I'm acutely aware of the "fetch on render" (or rather, "side-effect on render")
      program construction. While it's often fine, it's a conflation I think. In these context, David Khourshid's advice
@@ -201,6 +197,10 @@ General clean-ups, todos and things I wish to implement for this project:
     * UPDATE: RTK has  [`createListenerMiddleware`](https://redux-toolkit.js.org/api/createListenerMiddleware). That's what I'll use.
     * UPDATE: Ok I am going to use a "kick-off token restoration on render" strategy. I'm using Redux listeners and state
       so that React's strict mode double effect-triggering is countered (phew, feels good).
+* [ ] SKIP (I don't want to do this. "Components encapsulating long-lived state" is wrong. Components are flighty because of the nature of React. I'm happy with my token state/logic in Redux, or even organic JS) Abstract the token input/storage into a component
+* [ ] OBSOLETE (I think this is not true. I think I am getting all the state. Refreshing the page I think is the important part) Figure out some trick to prevent the app from initializing until Redux DevTools have attached. I don't think I'm getting
+  all the early action history which is a shame. If I can get a comprehensive history, then I can delete some of the log
+  statements.
 
 
 ## Reference

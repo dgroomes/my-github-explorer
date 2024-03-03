@@ -3,8 +3,10 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { MainElement } from "./MainElement";
 import { Provider } from "react-redux";
-import { store, listenerMiddleware } from "./store";
+import { init } from "./store";
 import {registerListeners } from "./listeners";
+
+const {store, listenerMiddleware } = init();
 
 registerListeners(listenerMiddleware);
 

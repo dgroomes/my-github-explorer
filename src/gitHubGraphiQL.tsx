@@ -4,8 +4,8 @@ import { createGraphiQLFetcher } from "@graphiql/toolkit";
 import { Alert, Button, Input, Space, Spin } from "antd";
 import { useToken } from "./useToken";
 import { logger } from "./code";
-import { useAppDispatch } from "./hooks";
 import { setToken } from "./monolithicSlice";
+import {useDispatch} from "react-redux";
 
 const log = logger("GitHubGraphiQL");
 
@@ -16,7 +16,7 @@ const log = logger("GitHubGraphiQL");
  * This component has some logic to request/validate a GitHub personal access token.
  */
 export default function GitHubGraphiQL() {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
   const token = useToken();
 
   // Well, I refactored this to be more "algebraic data types"-like but the nesting is a bit much and so is the

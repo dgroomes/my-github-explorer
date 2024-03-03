@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { logger, TokenState } from "./code";
-import { useAppDispatch, useAppSelector } from "./hooks";
+import { useAppSelector } from "./hooks";
 import { restoreToken, setToken } from "./monolithicSlice";
+import {useDispatch} from "react-redux";
 
 const log = logger("useToken");
 
@@ -14,7 +15,7 @@ const log = logger("useToken");
  * hook validates it using the GitHub API. The hook gives the validated token the backend via IPC to store it.
  */
 export function useToken(): TokenState {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
   const token = useAppSelector((state) => state.monolithic.tokenState);
   const shouldStoreAfterValidation = useAppSelector((state) => state.monolithic.shouldStoreAfterValidation);
 

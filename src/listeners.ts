@@ -1,7 +1,7 @@
-import {setShouldStoreAfterValidation, setToken} from "./monolithicSlice";
-import {RootState} from "./store";
-import {logger} from "./code";
-import {ListenerMiddlewareInstance} from "@reduxjs/toolkit";
+import { setShouldStoreAfterValidation, setToken } from "./monolithicSlice";
+import { logger } from "./code";
+import { ListenerMiddlewareInstance } from "@reduxjs/toolkit";
+import { RootState } from "./store";
 
 const log = logger("listeners");
 

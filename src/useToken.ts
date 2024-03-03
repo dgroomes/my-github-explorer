@@ -14,17 +14,9 @@ const log = logger("useToken");
  * hook validates it using the GitHub API. The hook gives the validated token the backend via IPC to store it.
  */
 export function useToken(): TokenState {
-  log("Invoked.");
   const dispatch = useAppDispatch();
   const token = useAppSelector((state) => state.monolithic.tokenState);
   const shouldStoreAfterValidation = useAppSelector((state) => state.monolithic.shouldStoreAfterValidation);
-  if (typeof token === "object") {
-    log({ kind: token.kind });
-  } else if (token === "empty") {
-    log("Token is empty");
-  } else if (token === "restoring") {
-    log("Token is restoring.");
-  }
 
   useEffect(() => {
     // Kick-off the token restoration process. In general, we're trying to escape from 'useEffect' when we can. In

@@ -16,14 +16,8 @@ const log = logger("GitHubGraphiQL");
  * This component has some logic to request/validate a GitHub personal access token.
  */
 export default function GitHubGraphiQL() {
-  log("Invoked.");
   const dispatch = useAppDispatch();
   const token = useToken();
-  if (typeof token === "object") {
-    log({ kind: token.kind });
-  } else if (token === "empty") {
-    log("Token is empty.");
-  }
 
   // Well, I refactored this to be more "algebraic data types"-like but the nesting is a bit much and so is the
   // duplicated input/button stuff.

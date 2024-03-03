@@ -86,7 +86,7 @@ Follows these instructions to install and run the developer tools and connect to
       ```
     * This starts the server and opens your web browser to <http://127.0.0.1:8000>. You need to configure the web app to
       connect to the server by going to the "Settings" tab and then clicking the "Use local (custom) server" radio button
-      and clicking the "Connect" button.
+      and clicking the "Connect" button. This is a one-time setup because this setting is stored in local storage.
 4. Run our app but with a special flag to connect to the standalone React Developer Tools:
     * ```shell
       npm run start:with-devtools
@@ -102,7 +102,7 @@ Follows these instructions to install and run the developer tools and connect to
 
 General clean-ups, todos and things I wish to implement for this project:
 
-* [ ] (Update: maybe, maybe not) Abstract the token input/storage into a component
+* [ ] SKIP (I don't want to do this. "Components encapsulating long-lived state" is wrong. Components are flighty because of the nature of React. I'm happy with my token state/logic in Redux, or even organic JS) Abstract the token input/storage into a component
 * [ ] Query (search) for the current user's repositories. Hardcode to a 100 limit (which is a limit of the API; then
   you'll need pagination)
 * [ ] Query (get) the metadata for each of the repositories
@@ -111,12 +111,15 @@ General clean-ups, todos and things I wish to implement for this project:
 * [ ] Show the pre-constructed queries in codemirror (using a GraphiQL component). We want the syntax highlighting. Can
   we make them read-only?
 * [ ] Consider enforcing `noImplicitAny`
-* [ ] (Is this even true? Aren't we getting all state?) Figure out some trick to prevent the app from initializing until Redux DevTools have attached. I don't think I'm getting
+* [ ] OBSOLETE (I think this is not true. I think I am getting all the state. Refreshing the page I think is the important part) Figure out some trick to prevent the app from initializing until Redux DevTools have attached. I don't think I'm getting
   all the early action history which is a shame. If I can get a comprehensive history, then I can delete some of the log
   statements.
 * [ ] Move more code from `useEffect` to Redux listener callbacks/functions. 
-* [ ] RTK 2.0 ready? RTK 2.0 is a big upgrade, and I'm eager to upgrade. But Redux Developer Tools is not compatible with
-  RTK 2.0 yet. Only upgrade when it's compatible. 
+   * Consider removing `useToken` entirely. I'm acutely aware of the "fetch on render" (or rather, "side-effect on render")
+     program construction. While it's often fine, it's a conflation I think. In these context, David Khourshid's advice
+     really rings true about [saying goodbye to `useEffect`](https://www.youtube.com/watch?v=bGzanfKVFeU).
+* [ ] RTK 2.0 ready? RTK 2.0 is a big upgrade, and I'm eager to upgrade. But Redux Developer Tools are not compatible with
+  RTK 2.0 yet. Only upgrade when it's compatible. See [more info in my own extensive notes](https://github.com/dgroomes/redux-playground/blob/d2ec267b80831c1576a5db1a9408d828febce1b1/redux-devtools-remote/README.md?plain=1#L88).
 * [ ] Where am I supposed to put Redux-coupled code? In `store.ts`, `-slice.ts`, or somewhere else?
 
 
